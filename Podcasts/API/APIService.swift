@@ -13,11 +13,35 @@ import FeedKit
 
 class APIService {
     
+    typealias EpisodeDownloadComplete = (fileUrl: String, episodeTitle: String)
     let baseiTunesSearchURL = "https://itunes.apple.com/search"
-
     
-    //singleton
     static let shared = APIService()
+    
+    func downloadEpisode(episode: Episode) {
+        print("Downloading episode using Alamofire at url", episode.streamUrl)
+        
+        let downloadRequest = DownloadRequest.suggestedDownloadDestination()
+        Alamofire.download(episode.streamUrl, to: downloadRequest).downloadProgress { (progress) in
+            print(progress.fractionCompleted)
+            NotificationCenter.default.post(name: .downloadProgress, object: nil, userInfo: ["title": episode.title, "progress" : progress.fractionCompleted])
+            }.response { (response) in
+                print(response.destinationURL?.absoluteString ?? "")
+                let episodeDownloadComplete = EpisodeDownloadComplete(fileUrl: response.destinationURL?.absoluteString ?? "", episode.title)
+                NotificationCenter.default.post(name: .downloadComplete, object: episodeDownloadComplete, userInfo: nil)
+                
+                var downloadedEpisodes = UserDefaults.standard.downloadedEpisodes()
+                guard let index = downloadedEpisodes.index(where: { $0.title == episode.title && $0.author == episode.author}) else { return }
+                downloadedEpisodes[index].fileUrl = response.destinationURL?.absoluteString ?? ""
+                do {
+                    let data = try JSONEncoder().encode(downloadedEpisodes)
+                    UserDefaults.standard.set(data, forKey: UserDefaults.downloadEpisodesKey)
+                } catch let encodeErr {
+                    print("Failed to encode downloaded episodes", encodeErr)
+                }
+                
+        }
+    }
     
     func fetchEpisodes(feedUrl: String, completionHandler: @escaping ([Episode]) -> ()) {
         
@@ -54,8 +78,8 @@ class APIService {
             do {
                 let searchResult = try JSONDecoder().decode(SearchResults.self, from: data)
                 completionHandler(searchResult.results)
-//                self.podcasts = searchResult.results
-//                self.tableView.reloadData()
+                //                self.podcasts = searchResult.results
+                //                self.tableView.reloadData()
             } catch let decodeErr {
                 print("Failed to decode:", decodeErr)
             }
@@ -66,4 +90,10 @@ class APIService {
         let resultCount: Int
         let results: [Podcast]
     }
+}
+
+extension Notification.Name {
+    static let downloadProgress = NSNotification.Name("downloadProgress")
+    static let downloadComplete = NSNotification.Name("downloadComplete")
+
 }

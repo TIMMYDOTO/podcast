@@ -23,7 +23,6 @@ class PlayerDetailsView: UIView {
             setupAudioSession()
             guard let url = URL(string: episode.imageUrl ?? "") else { return }
             episodeImageView.sd_setImage(with: url)
-//            miniEpisodeImageView.sd_setImage(with: url)
             miniEpisodeImageView.sd_setImage(with: url) { (image, _, _, _) in
                 guard let image = image else { return }
                 var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo
@@ -50,9 +49,23 @@ class PlayerDetailsView: UIView {
     }()
     
     fileprivate func  playEpisode() {
-        print("Trying to play episode at url:", episode.streamUrl)
-        guard let url = URL(string: episode.streamUrl) else { return }
-        let playerItem = AVPlayerItem(url: url)
+        if episode.fileUrl != nil {
+            playEpisodeUsingFileUrl()
+        } else {
+            print("Trying to play episode at url:", episode.streamUrl)
+            guard let url = URL(string: episode.streamUrl) else { return }
+            let playerItem = AVPlayerItem(url: url)
+            player.replaceCurrentItem(with: playerItem)
+            player.play()
+        }
+    }
+    
+    fileprivate func playEpisodeUsingFileUrl() {
+        guard let fileURL = URL(string: episode.fileUrl ?? "") else { return }
+        let fileName = fileURL.lastPathComponent
+        guard var trueLocation = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        trueLocation.appendPathComponent(fileName)
+        let playerItem = AVPlayerItem(url: trueLocation)
         player.replaceCurrentItem(with: playerItem)
         player.play()
     }
