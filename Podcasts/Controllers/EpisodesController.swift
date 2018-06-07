@@ -28,7 +28,6 @@ class EpisodesController: UITableViewController {
                 self.tableView.reloadData()
             }
         }
-        
     }
     
     fileprivate let cellId = "cellId"
@@ -118,10 +117,6 @@ class EpisodesController: UITableViewController {
         return cell
     }
     
-//    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 200
-//    }
-    
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let downloadAction = UITableViewRowAction(style: .normal, title: "Download") { (_, _) in
             print("Downloading episodes")
@@ -139,8 +134,6 @@ extension EpisodesController: ReadMoreEpisodeDelegate {
         tableView.beginUpdates()
         tableView.endUpdates()
     }
-    
-    
 }
     
 
