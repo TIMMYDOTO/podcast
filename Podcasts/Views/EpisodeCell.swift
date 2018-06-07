@@ -14,6 +14,7 @@ class EpisodeCell: UITableViewCell {
         didSet {
             titleLabel.text = episode.title
             descriptionLabel.text = episode.description
+            durationLabel.text = episode.duration?.asString(style: .abbreviated)
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MMM dd, yyyy"
             pubDateLabel.text = dateFormatter.string(from: episode.pubDate)
@@ -24,6 +25,7 @@ class EpisodeCell: UITableViewCell {
     }
     
     
+    @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var progressLabel: UILabel!
     @IBOutlet weak var episodeImageView: UIImageView!
     @IBOutlet weak var pubDateLabel: UILabel!

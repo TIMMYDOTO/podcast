@@ -28,7 +28,7 @@
                         </constraints>
                     </imageView>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="FJY-YT-4Yt">
-                        <rect key="frame" x="132" y="126" width="455" height="66"/>
+                        <rect key="frame" x="132" y="116" width="455" height="87"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="pubDate" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pte-EC-drU">
                                 <rect key="frame" x="0.0" y="0.0" width="62.5" height="19.5"/>
@@ -42,8 +42,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="duration" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9y3-rF-eYE" userLabel="Duration Label">
+                                <rect key="frame" x="0.0" y="49" width="54" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.57045853140000002" green="0.57047235969999999" blue="0.57046490910000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gq1-Q1-HQ2">
-                                <rect key="frame" x="0.0" y="49" width="72.5" height="17"/>
+                                <rect key="frame" x="0.0" y="70" width="72.5" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -71,6 +77,7 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="descriptionLabel" destination="gq1-Q1-HQ2" id="KVd-ag-lNk"/>
+                <outlet property="durationLabel" destination="9y3-rF-eYE" id="XtF-NG-ib7"/>
                 <outlet property="episodeImageView" destination="ptp-Td-ztH" id="KhB-WB-EXy"/>
                 <outlet property="progressLabel" destination="od6-XR-7Gl" id="mIC-ki-kXG"/>
                 <outlet property="pubDateLabel" destination="Pte-EC-drU" id="u0u-0p-dZW"/>

@@ -41,8 +41,8 @@ class DownloadsController: UITableViewController {
         guard let title = userInfo["title"] as? String else { return }
         guard let index = self.episodes.index(where: { $0.title == title}) else { return }
         guard let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? EpisodeCell else { return }
-        cell.progressLabel.text = "\(progress * 100)%"
-        cell.progressLabel.isEnabled = false
+        cell.progressLabel.text = "\(Int(progress * 100))%"
+        cell.progressLabel.isHidden = false
         if progress == 1 {
             cell.progressLabel.isHidden = true
         }

@@ -35,7 +35,7 @@ class FavoritesController: UICollectionViewController, UICollectionViewDelegateF
     }
     
     @objc func handleLongPress(gesture: UILongPressGestureRecognizer) {
-        print("Captured  press")
+        print("Captured press")
         let location = gesture.location(in: collectionView)
         guard let selectedIndexPath = collectionView?.indexPathForItem(at: location) else { return }
         print(selectedIndexPath.item)
