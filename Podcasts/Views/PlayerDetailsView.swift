@@ -12,7 +12,6 @@ import MediaPlayer
 
 class PlayerDetailsView: UIView {
     
-    
     var episode: Episode! {
         didSet {
             miniTitleLabel.text = episode.title
@@ -221,6 +220,7 @@ class PlayerDetailsView: UIView {
         setupGestures()
         observePlayerCurrentTime()
         observeBoundaryTime()
+        volumeSlider.setValue(AVAudioSession.sharedInstance().outputVolume, animated: true)
     }
     
     fileprivate func setupInterruptionObserver() {
@@ -273,7 +273,7 @@ class PlayerDetailsView: UIView {
                 self.miniPlayerView.alpha = 1
                 self.maximizedStackView.alpha = 0
             }
-        })
+        }) 
     }
     
     @objc func handleTapMaximize() {
@@ -308,6 +308,7 @@ class PlayerDetailsView: UIView {
         }
     }
     
+    @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var maximizedStackView: UIStackView!
     @IBOutlet weak var miniPlayerView: UIView!
     
@@ -336,12 +337,11 @@ class PlayerDetailsView: UIView {
     }
     
     @IBAction func handleVolumeChanged(_ sender: UISlider) {
-        player.volume = sender.value
+            player.volume = sender.value
     }
     
     
     @IBAction func handleDismiss(_ sender: UIButton) {
-//        self.removeFromSuperview()
         let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
         mainTabBarController?.minimizePlayerDetails()
     }

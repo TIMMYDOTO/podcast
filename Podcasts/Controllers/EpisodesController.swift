@@ -10,7 +10,7 @@ import UIKit
 import FeedKit
 
 class EpisodesController: UITableViewController {
-    
+    let selectedIndex = IndexPath()
     var podcast: Podcast? {
         didSet {
             navigationItem.title = podcast?.trackName
@@ -28,7 +28,6 @@ class EpisodesController: UITableViewController {
                 self.tableView.reloadData()
             }
         }
-        
     }
     
     fileprivate let cellId = "cellId"
@@ -83,6 +82,8 @@ class EpisodesController: UITableViewController {
         let nib = UINib(nibName: "EpisodeCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: cellId)
         tableView.tableFooterView = UIView()
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 450
     }
     
     //MARK:- UITableView
@@ -101,7 +102,7 @@ class EpisodesController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let episode = self.episodes[indexPath.row]
         let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
-        mainTabBarController?.maximizePlayerDetails(episode: episode, playlistEpisodes: self.episodes)        
+        mainTabBarController?.maximizePlayerDetails(episode: episode, playlistEpisodes: self.episodes)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -112,11 +113,8 @@ class EpisodesController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! EpisodeCell
         let episode = episodes[indexPath.row]
         cell.episode = episode
+        cell.delegate = self
         return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 134
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
@@ -129,6 +127,15 @@ class EpisodesController: UITableViewController {
         }
         return [downloadAction]
     }
-    
-    
 }
+
+extension EpisodesController: ReadMoreEpisodeDelegate {
+    func moreTapped(cell: EpisodeCell) {
+        tableView.beginUpdates()
+        tableView.endUpdates()
+    }
+}
+    
+
+
+

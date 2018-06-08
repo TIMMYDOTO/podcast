@@ -29,6 +29,9 @@
 		2C9A60ED205B15BE00D2C909 /* FavoritePodcastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9A60EC205B15BE00D2C909 /* FavoritePodcastCell.swift */; };
 		2C9A60EF205E943700D2C909 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9A60EE205E943700D2C909 /* UserDefaults.swift */; };
 		2CABE24520C830AD00178877 /* DownloadsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CABE24420C830AD00178877 /* DownloadsController.swift */; };
+		2CB5D51920C95BE100EA2EA7 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB5D51820C95BE100EA2EA7 /* HomeController.swift */; };
+		2CB5D51B20C97B4200EA2EA7 /* TimeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB5D51A20C97B4200EA2EA7 /* TimeExtension.swift */; };
+		2CDDDD7820CAD40B0080CCF3 /* StoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDDDD7720CAD40B0080CCF3 /* StoreController.swift */; };
 		2CE0AE0A203C1AFF00D21838 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE0AE09203C1AFF00D21838 /* APIService.swift */; };
 		2CE0AE11203D725600D21838 /* PodcastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE0AE10203D725600D21838 /* PodcastCell.swift */; };
 		2CE0AE13203D792900D21838 /* PodcastCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CE0AE12203D792900D21838 /* PodcastCell.xib */; };
@@ -61,6 +64,9 @@
 		2C9A60EC205B15BE00D2C909 /* FavoritePodcastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritePodcastCell.swift; sourceTree = "<group>"; };
 		2C9A60EE205E943700D2C909 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		2CABE24420C830AD00178877 /* DownloadsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsController.swift; sourceTree = "<group>"; };
+		2CB5D51820C95BE100EA2EA7 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
+		2CB5D51A20C97B4200EA2EA7 /* TimeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeExtension.swift; sourceTree = "<group>"; };
+		2CDDDD7720CAD40B0080CCF3 /* StoreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreController.swift; sourceTree = "<group>"; };
 		2CE0AE09203C1AFF00D21838 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		2CE0AE10203D725600D21838 /* PodcastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastCell.swift; sourceTree = "<group>"; };
 		2CE0AE12203D792900D21838 /* PodcastCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PodcastCell.xib; sourceTree = "<group>"; };
@@ -124,6 +130,8 @@
 				2C8EC8CE20402456001D0C7F /* EpisodesController.swift */,
 				2C9A60EA205B123F00D2C909 /* FavoritesController.swift */,
 				2CABE24420C830AD00178877 /* DownloadsController.swift */,
+				2CB5D51820C95BE100EA2EA7 /* HomeController.swift */,
+				2CDDDD7720CAD40B0080CCF3 /* StoreController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -145,6 +153,7 @@
 				2C293328204DBBF400870D05 /* CMTime.swift */,
 				2C9A60C02058561700D2C909 /* UIApplication.swift */,
 				2C9A60EE205E943700D2C909 /* UserDefaults.swift */,
+				2CB5D51A20C97B4200EA2EA7 /* TimeExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -330,9 +339,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C8EC8DA204708A3001D0C7F /* RSSFeed.swift in Sources */,
+				2CDDDD7820CAD40B0080CCF3 /* StoreController.swift in Sources */,
 				2C293327204D6F6E00870D05 /* PlayerDetailsView.swift in Sources */,
 				2C8DAF5E203A0D2E000CE7EA /* PodcastsSearchController.swift in Sources */,
 				2C9A60C12058561700D2C909 /* UIApplication.swift in Sources */,
+				2CB5D51920C95BE100EA2EA7 /* HomeController.swift in Sources */,
 				2C8EC8D8204707F5001D0C7F /* String.swift in Sources */,
 				2C293329204DBBF400870D05 /* CMTime.swift in Sources */,
 				2C8DAF4B203A05C3000CE7EA /* ViewController.swift in Sources */,
@@ -342,6 +353,7 @@
 				2C8DAF5B203A0610000CE7EA /* MainTabBarController.swift in Sources */,
 				2C8EC8D42046FF04001D0C7F /* EpisodeCell.swift in Sources */,
 				2C9A60EB205B123F00D2C909 /* FavoritesController.swift in Sources */,
+				2CB5D51B20C97B4200EA2EA7 /* TimeExtension.swift in Sources */,
 				2CE0AE0A203C1AFF00D21838 /* APIService.swift in Sources */,
 				2C8DAF61203A0DBB000CE7EA /* Podcast.swift in Sources */,
 				2C9A60EF205E943700D2C909 /* UserDefaults.swift in Sources */,
@@ -424,6 +436,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -474,6 +487,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
