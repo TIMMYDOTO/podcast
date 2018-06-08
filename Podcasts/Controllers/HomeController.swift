@@ -15,15 +15,21 @@ class HomeController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
+        setupNavigationBar()
     }
     
+    fileprivate func setupNavigationBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "search"), style: .plain, target: self, action: #selector(searchButtonPressed))
+    }
+    
+    @objc fileprivate func searchButtonPressed() {
+        navigationController?.pushViewController(PodcastsSearchController(), animated: true)
+    }
     
     //MARK:- UITableView
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: cellId)
-        cell.backgroundColor = .yellow
         cell.textLabel?.text = controllers[indexPath.row]
         return cell
     }
