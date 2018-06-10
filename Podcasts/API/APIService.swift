@@ -78,8 +78,46 @@ class APIService {
             do {
                 let searchResult = try JSONDecoder().decode(SearchResults.self, from: data)
                 completionHandler(searchResult.results)
-                //                self.podcasts = searchResult.results
-                //                self.tableView.reloadData()
+            } catch let decodeErr {
+                print("Failed to decode:", decodeErr)
+            }
+        }
+    }
+    
+    func fetchPopularPodcasts(completionHandler: @escaping ([Podcast]) -> ()) {
+        let parameters = ["term": "podcast", "media" : "podcast", "sort" : "popular"]
+        
+        Alamofire.request(baseiTunesSearchURL, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: nil).responseData { (dataResponse) in
+            if let err = dataResponse.error {
+                print("Failed to contact yahoo", err)
+                return
+            }
+            
+            guard let data = dataResponse.data else { return }
+            do {
+                let searchResult = try JSONDecoder().decode(SearchResults.self, from: data)
+                completionHandler(searchResult.results)
+            } catch let decodeErr {
+                print("Failed to decode:", decodeErr)
+            }
+        }
+    }
+    
+    func fetchPodcastsByGenre(genreId: Int, completionHandler: @escaping ([Podcast]) -> ()) {
+        
+        let parameters = ["term": "podcast", "media" : "podcast", "genreId": genreId] as [String : Any]
+
+        
+        Alamofire.request(baseiTunesSearchURL, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: nil).responseData { (dataResponse) in
+            if let err = dataResponse.error {
+                print("Failed to contact yahoo", err)
+                return
+            }
+            
+            guard let data = dataResponse.data else { return }
+            do {
+                let searchResult = try JSONDecoder().decode(SearchResults.self, from: data)
+                completionHandler(searchResult.results)
             } catch let decodeErr {
                 print("Failed to decode:", decodeErr)
             }
