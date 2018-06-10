@@ -43,7 +43,7 @@ class APIService {
         }
     }
     
-    func fetchEpisodes(feedUrl: String, completionHandler: @escaping ([Episode]) -> ()) {
+    func fetchEpisodes(feedUrl: String, completionHandler: @escaping ([Episode], RSSFeed) -> ()) {
         
         let secureFeedUrl = feedUrl.contains("https") ? feedUrl : feedUrl.replacingOccurrences(of: "http", with: "https")
         guard let url = URL(string: secureFeedUrl) else { return }
@@ -58,7 +58,7 @@ class APIService {
                 }
                 guard let feed = result.rssFeed else { return }
                 let episodes = feed.toEpisodes()
-                completionHandler(episodes)
+                completionHandler(episodes, feed)
             })
         }
     }

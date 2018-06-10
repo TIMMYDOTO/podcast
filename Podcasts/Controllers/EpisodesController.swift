@@ -17,22 +17,25 @@ class EpisodesController: UITableViewController {
             fetchEpisodes()
         }
     }
+    var feed: RSSFeed?
     
     fileprivate func fetchEpisodes()  {
         print("Looking for episodes at feed url:", podcast?.feedUrl ?? "")
         guard let feedUrl = podcast?.feedUrl else { return }
         
-        APIService.shared.fetchEpisodes(feedUrl: feedUrl) { (episodes) in
+        APIService.shared.fetchEpisodes(feedUrl: feedUrl) { (episodes, feed) in
+            self.feed = feed
             self.episodes = episodes
             DispatchQueue.main.async {
                 self.tableView.reloadData()
+                self.mainDescriptionLabel.text = feed.description
             }
         }
     }
     
     fileprivate let cellId = "cellId"
     var episodes = [Episode]()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
@@ -84,7 +87,7 @@ class EpisodesController: UITableViewController {
         tableView.tableFooterView = UIView()
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 450
-    }
+  }
     
     //MARK:- UITableView
     
@@ -98,6 +101,22 @@ class EpisodesController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return episodes.isEmpty ? 200 : 0
     }
+    
+    let headerView: UIView = {
+        let headerView = UIView()
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+        headerView.backgroundColor = .red
+        return headerView
+    }()
+
+    let mainDescriptionLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+    
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let episode = self.episodes[indexPath.row]

@@ -30,3 +30,4 @@ struct Episode: Codable {
         self.duration = feedItem.iTunes?.iTunesDuration
     }
 }
+
