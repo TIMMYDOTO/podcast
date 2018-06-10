@@ -146,11 +146,11 @@
                             <rect key="frame" x="0.0" y="497" width="327" height="174"/>
                             <subviews>
                                 <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yvZ-Dx-JfX">
-                                    <rect key="frame" x="0.0" y="0.0" width="48.666666666666664" height="174"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="50" height="174"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </view>
-                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DXS-ad-2mI">
-                                    <rect key="frame" x="48.666666666666671" y="0.0" width="44" height="174"/>
+                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DXS-ad-2mI">
+                                    <rect key="frame" x="50" y="0.0" width="44" height="174"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="44" id="SQL-oa-Vak"/>
                                     </constraints>
@@ -160,24 +160,31 @@
                                         <action selector="handleRewind:" destination="pal-Wv-TDz" eventType="touchUpInside" id="TTW-zo-3Xs"/>
                                     </connections>
                                 </button>
-                                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Arj-tL-uym">
-                                    <rect key="frame" x="92.666666666666671" y="0.0" width="49.000000000000014" height="174"/>
+                                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kBH-wF-Vop">
+                                    <rect key="frame" x="94" y="0.0" width="50" height="174"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uSA-3S-MlB">
-                                    <rect key="frame" x="141.66666666666666" y="0.0" width="54" height="174"/>
+                                    <rect key="frame" x="144" y="0.0" width="54" height="174"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="54" id="G9o-25-HZU"/>
                                     </constraints>
                                     <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <state key="normal" image="play"/>
                                 </button>
-                                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kBH-wF-Vop">
-                                    <rect key="frame" x="195.66666666666666" y="0.0" width="38.666666666666657" height="174"/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </view>
+                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bP0-kk-Rc4">
+                                    <rect key="frame" x="198" y="0.0" width="44" height="174"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="44" id="2aX-o7-XLC"/>
+                                    </constraints>
+                                    <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <state key="normal" title="1x"/>
+                                    <connections>
+                                        <action selector="playbackSpeedBtnPressed:" destination="pal-Wv-TDz" eventType="touchUpInside" id="OZx-kb-1es"/>
+                                    </connections>
+                                </button>
                                 <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fok-JN-waC">
-                                    <rect key="frame" x="234.33333333333331" y="0.0" width="44" height="174"/>
+                                    <rect key="frame" x="242" y="0.0" width="44" height="174"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="44" id="NjC-91-Bnv"/>
                                     </constraints>
@@ -188,7 +195,7 @@
                                     </connections>
                                 </button>
                                 <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LDY-zp-VfE">
-                                    <rect key="frame" x="278.33333333333331" y="0.0" width="48.666666666666686" height="174"/>
+                                    <rect key="frame" x="286" y="0.0" width="41" height="174"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </view>
                             </subviews>
@@ -247,6 +254,7 @@
                 <outlet property="miniPlayerView" destination="bHb-kW-wOJ" id="s0P-YL-fzT"/>
                 <outlet property="miniTitleLabel" destination="Y7n-Og-KpK" id="zMk-IW-k91"/>
                 <outlet property="playPauseButton" destination="uSA-3S-MlB" id="bDP-SJ-GMk"/>
+                <outlet property="playbackSpeedButton" destination="bP0-kk-Rc4" id="nHP-Vr-Px3"/>
                 <outlet property="volumeSlider" destination="WUQ-QK-V36" id="kFy-gx-X6O"/>
             </connections>
             <point key="canvasLocation" x="-196" y="-22"/>

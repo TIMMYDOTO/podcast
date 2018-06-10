@@ -387,6 +387,28 @@ class PlayerDetailsView: UIView {
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var currentTimeSlider: UISlider!
     
+    @IBOutlet weak var playbackSpeedButton: UIButton!
+    @IBAction func playbackSpeedBtnPressed(_ sender: UIButton) {
+            sender.tag += 1
+            if sender.tag > 3 { sender.tag = 0}
+        switch  sender.tag {
+        case 1:
+            player.rate = 1.5
+            playbackSpeedButton.setTitle("\(player.rate)", for: .normal)
+        case 2:
+            player.rate = 2.0
+            playbackSpeedButton.setTitle("\(player.rate)", for: .normal)
+        case 3:
+            player.rate = 0.5
+            playbackSpeedButton.setTitle("\(player.rate)", for: .normal)
+        default:
+            player.rate = 1.0
+            playbackSpeedButton.setTitle("\(player.rate)", for: .normal)
+        }
+        
+        
+        }
+    
     @objc func handlePlayPause() {
         print("Trying to play and pause")
         if player.timeControlStatus == .paused {
