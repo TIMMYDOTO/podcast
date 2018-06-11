@@ -17,6 +17,7 @@ class PlayerDetailsView: UIView {
             miniTitleLabel.text = episode.title
             episodeTitleLabel.text = episode.title
             authorLabel.text = episode.author
+            episodeDescriptionLabel.text = episode.description
             setupNowPlayingInfo()
             playEpisode()
             setupAudioSession()
@@ -90,27 +91,27 @@ class PlayerDetailsView: UIView {
     
     fileprivate func setupGestures() {
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapMaximize)))
-        panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-        miniPlayerView.addGestureRecognizer(panGesture)
-        maximizedStackView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleDismissalPan)))
+//        panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+//        miniPlayerView.addGestureRecognizer(panGesture)
+//        maximizedStackView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleDismissalPan)))
     }
     
-    @objc func handleDismissalPan(gesture: UIPanGestureRecognizer) {
-        print("maximizedStackView dismissal")
-        if gesture.state == .changed {
-            let translation = gesture.translation(in: superview)
-            maximizedStackView.transform = CGAffineTransform(translationX: 0, y: translation.y)
-        } else if gesture.state == .ended {
-            let translation = gesture.translation(in: superview)
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                self.maximizedStackView.transform = .identity
-                if translation.y > 50 {
-                    let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
-                    mainTabBarController?.minimizePlayerDetails()
-                }
-            })
-        }
-    }
+//    @objc func handleDismissalPan(gesture: UIPanGestureRecognizer) {
+//        print("maximizedStackView dismissal")
+//        if gesture.state == .changed {
+//            let translation = gesture.translation(in: superview)
+//            maximizedStackView.transform = CGAffineTransform(translationX: 0, y: translation.y)
+//        } else if gesture.state == .ended {
+//            let translation = gesture.translation(in: superview)
+//            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+//                self.maximizedStackView.transform = .identity
+//                if translation.y > 50 {
+//                    let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
+//                    mainTabBarController?.minimizePlayerDetails()
+//                }
+//            })
+//        }
+//    }
     
     fileprivate func setupAudioSession() {
         do {
@@ -293,6 +294,7 @@ class PlayerDetailsView: UIView {
     //MARK:- IB Actions and Outlets
     
     
+    @IBOutlet weak var episodeDescriptionLabel: UILabel!
     @IBOutlet weak var miniEpisodeImageView: UIImageView!
     @IBOutlet weak var miniTitleLabel: UILabel!
     @IBOutlet weak var miniPlayPausebutton: UIButton! {
@@ -376,6 +378,7 @@ class PlayerDetailsView: UIView {
         }
     }
     
+
     @IBOutlet weak var authorLabel: UILabel!
     @IBOutlet weak var playPauseButton: UIButton! {
         didSet {
