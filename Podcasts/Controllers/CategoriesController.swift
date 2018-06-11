@@ -21,8 +21,10 @@ class CategoriesController: UITableViewController {
         setupNavigationBar()
     }
     
+
+    
     fileprivate func setupNavigationBar() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "search"), style: .plain, target: self, action: #selector(searchButtonPressed))
+        navigationItem.title = "Categories"
     }
     
     @objc fileprivate func searchButtonPressed() {
@@ -34,6 +36,7 @@ class CategoriesController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: cellId)
         cell.textLabel?.text = genres[indexPath.row]
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
     
@@ -46,4 +49,5 @@ class CategoriesController: UITableViewController {
         navigationController?.pushViewController(genreVC, animated: true)
         genreVC.genreIndex = genreIndexes[indexPath.row]
     }
+    
 }

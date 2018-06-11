@@ -30,6 +30,7 @@ class EpisodeCell: UITableViewCell {
     var isExpanded: Bool = false
     
     
+    @IBOutlet weak var downloadedImage: UIImageView!
     @IBOutlet weak var moreButton: UIButton!
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var progressLabel: UILabel!

@@ -70,10 +70,17 @@
                             <action selector="moreButtonTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="MIl-qn-Nme"/>
                         </connections>
                     </button>
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="downloaded" translatesAutoresizingMaskIntoConstraints="NO" id="cqz-wq-4CA">
+                        <rect key="frame" x="25" y="16" width="50" height="88"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="50" id="D4c-AI-8Uf"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="hKo-LY-ehV" firstAttribute="top" secondItem="ptp-Td-ztH" secondAttribute="bottom" constant="15" id="2f8-sS-yF8"/>
                     <constraint firstItem="od6-XR-7Gl" firstAttribute="centerX" secondItem="ptp-Td-ztH" secondAttribute="centerX" id="4PU-48-bCm"/>
+                    <constraint firstItem="cqz-wq-4CA" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="9kV-R2-Ku0"/>
                     <constraint firstItem="FJY-YT-4Yt" firstAttribute="leading" secondItem="ptp-Td-ztH" secondAttribute="trailing" constant="16" id="Euw-ce-OT3"/>
                     <constraint firstItem="hKo-LY-ehV" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="15" id="GUO-RU-1Ij"/>
                     <constraint firstItem="FJY-YT-4Yt" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="25" id="KKq-5y-bNp"/>
@@ -83,12 +90,15 @@
                     <constraint firstItem="od6-XR-7Gl" firstAttribute="centerY" secondItem="ptp-Td-ztH" secondAttribute="centerY" id="RkR-kf-bvU"/>
                     <constraint firstItem="ptp-Td-ztH" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="SXL-Ac-y5T"/>
                     <constraint firstAttribute="trailingMargin" secondItem="FJY-YT-4Yt" secondAttribute="trailing" id="XM5-lS-CiN"/>
+                    <constraint firstItem="cqz-wq-4CA" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="5" id="fgs-Qg-Hiy"/>
+                    <constraint firstItem="ptp-Td-ztH" firstAttribute="top" secondItem="cqz-wq-4CA" secondAttribute="bottom" constant="5" id="v2A-MF-Rgo"/>
                     <constraint firstItem="FJY-YT-4Yt" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="wwz-dO-J4a"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="descriptionLabel" destination="gq1-Q1-HQ2" id="KVd-ag-lNk"/>
+                <outlet property="downloadedImage" destination="cqz-wq-4CA" id="EZQ-c9-ujf"/>
                 <outlet property="durationLabel" destination="gYP-Wz-S0w" id="wd7-EV-QTy"/>
                 <outlet property="episodeImageView" destination="ptp-Td-ztH" id="KhB-WB-EXy"/>
                 <outlet property="moreButton" destination="hKo-LY-ehV" id="s21-NO-1XY"/>
@@ -101,5 +111,6 @@
     </objects>
     <resources>
         <image name="appicon" width="60" height="60"/>
+        <image name="downloaded" width="21" height="21"/>
     </resources>
 </document>

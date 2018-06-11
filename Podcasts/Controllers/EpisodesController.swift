@@ -142,7 +142,8 @@ class EpisodesController: UITableViewController {
             let episode = self.episodes[indexPath.row]
             UserDefaults.standard.downloadEpisode(episode: episode)
             APIService.shared.downloadEpisode(episode: episode)
-            
+            let cell = tableView.cellForRow(at: indexPath) as! EpisodeCell
+            cell.downloadedImage.isHidden = false
         }
         return [downloadAction]
     }

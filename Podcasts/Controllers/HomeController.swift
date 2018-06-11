@@ -41,7 +41,9 @@ class HomeController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let layout = UICollectionViewFlowLayout()
         let favoritesController = FavoritesController(collectionViewLayout: layout)
-        navigationController?.pushViewController(favoritesController, animated: true)
+        let unplayedController = UnplayedController()
+        let vc = [favoritesController, unplayedController]
+        navigationController?.pushViewController(vc[indexPath.row], animated: true)
     }
 }
 
