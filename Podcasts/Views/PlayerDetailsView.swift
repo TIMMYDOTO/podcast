@@ -89,29 +89,31 @@ class PlayerDetailsView: UIView {
     
     var panGesture: UIPanGestureRecognizer!
     
+    
     fileprivate func setupGestures() {
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapMaximize)))
-//        panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-//        miniPlayerView.addGestureRecognizer(panGesture)
-//        maximizedStackView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleDismissalPan)))
+        panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        miniPlayerView.addGestureRecognizer(panGesture)
+        maximizedStackView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleDismissalPan)))
     }
     
-//    @objc func handleDismissalPan(gesture: UIPanGestureRecognizer) {
-//        print("maximizedStackView dismissal")
-//        if gesture.state == .changed {
+    @objc func handleDismissalPan(gesture: UIPanGestureRecognizer) {
+        if gesture.state == .changed {
 //            let translation = gesture.translation(in: superview)
 //            maximizedStackView.transform = CGAffineTransform(translationX: 0, y: translation.y)
-//        } else if gesture.state == .ended {
-//            let translation = gesture.translation(in: superview)
-//            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-//                self.maximizedStackView.transform = .identity
-//                if translation.y > 50 {
-//                    let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
-//                    mainTabBarController?.minimizePlayerDetails()
-//                }
-//            })
-//        }
-//    }
+            scrollView.flashScrollIndicators()
+        } else if gesture.state == .ended {
+            let translation = gesture.translation(in: superview)
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.maximizedStackView.transform = .identity
+                if translation.y > 100 {
+                    let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
+                    mainTabBarController?.minimizePlayerDetails()
+                }
+            })
+        }
+    }
+    @IBOutlet weak var scrollView: UIScrollView!
     
     fileprivate func setupAudioSession() {
         do {

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2C293327204D6F6E00870D05 /* PlayerDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C293326204D6F6E00870D05 /* PlayerDetailsView.swift */; };
 		2C293329204DBBF400870D05 /* CMTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C293328204DBBF400870D05 /* CMTime.swift */; };
+		2C29AB4120CFC0D4009C1598 /* InProgressController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C29AB4020CFC0D4009C1598 /* InProgressController.swift */; };
 		2C8DAF49203A05C3000CE7EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8DAF48203A05C3000CE7EA /* AppDelegate.swift */; };
 		2C8DAF4B203A05C3000CE7EA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8DAF4A203A05C3000CE7EA /* ViewController.swift */; };
 		2C8DAF4E203A05C3000CE7EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C8DAF4C203A05C3000CE7EA /* Main.storyboard */; };
@@ -46,6 +47,7 @@
 		041541E7FB07C31BFF5AC002 /* Pods-Podcasts.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Podcasts.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Podcasts/Pods-Podcasts.debug.xcconfig"; sourceTree = "<group>"; };
 		2C293326204D6F6E00870D05 /* PlayerDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailsView.swift; sourceTree = "<group>"; };
 		2C293328204DBBF400870D05 /* CMTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTime.swift; sourceTree = "<group>"; };
+		2C29AB4020CFC0D4009C1598 /* InProgressController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InProgressController.swift; sourceTree = "<group>"; };
 		2C8DAF45203A05C3000CE7EA /* Podcasts.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Podcasts.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C8DAF48203A05C3000CE7EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2C8DAF4A203A05C3000CE7EA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				2CDDDD8120CD573A0080CCF3 /* CategoriesController.swift */,
 				2CDDDD8320CD5D4F0080CCF3 /* GenrePodcasts.swift */,
 				2CDDDD8520CE644D0080CCF3 /* UnplayedController.swift */,
+				2C29AB4020CFC0D4009C1598 /* InProgressController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -356,6 +359,7 @@
 				2C8DAF5E203A0D2E000CE7EA /* PodcastsSearchController.swift in Sources */,
 				2C9A60C12058561700D2C909 /* UIApplication.swift in Sources */,
 				2CB5D51920C95BE100EA2EA7 /* HomeController.swift in Sources */,
+				2C29AB4120CFC0D4009C1598 /* InProgressController.swift in Sources */,
 				2C8EC8D8204707F5001D0C7F /* String.swift in Sources */,
 				2C293329204DBBF400870D05 /* CMTime.swift in Sources */,
 				2C8DAF4B203A05C3000CE7EA /* ViewController.swift in Sources */,

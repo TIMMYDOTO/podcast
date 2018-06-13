@@ -17,14 +17,14 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0YT-bV-Lhl">
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0YT-bV-Lhl">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g5c-Nx-PyR">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="784.66666666666663"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="810"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Hyg-Cv-9MF">
-                                    <rect key="frame" x="24" y="0.0" width="327" height="760.66666666666663"/>
+                                    <rect key="frame" x="24" y="0.0" width="327" height="786"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E13-X5-9tY">
                                             <rect key="frame" x="0.0" y="0.0" width="327" height="44"/>
@@ -41,6 +41,7 @@
                                         </button>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="appicon" translatesAutoresizingMaskIntoConstraints="NO" id="u3o-z6-WaN">
                                             <rect key="frame" x="0.0" y="49" width="327" height="327"/>
+                                            <gestureRecognizers/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="u3o-z6-WaN" secondAttribute="height" id="tcc-xd-EWG"/>
                                             </constraints>
@@ -194,6 +195,15 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SrZ-f2-6bU">
+                                            <rect key="frame" x="0.0" y="765.66666666666663" width="327" height="20.333333333333371"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="087-1J-uTW"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                 </stackView>
                             </subviews>
@@ -299,6 +309,7 @@
                 <outlet property="miniTitleLabel" destination="Y7n-Og-KpK" id="zMk-IW-k91"/>
                 <outlet property="playPauseButton" destination="uSA-3S-MlB" id="bDP-SJ-GMk"/>
                 <outlet property="playbackSpeedButton" destination="bP0-kk-Rc4" id="nHP-Vr-Px3"/>
+                <outlet property="scrollView" destination="0YT-bV-Lhl" id="Hb4-bi-Tf8"/>
                 <outlet property="volumeSlider" destination="WUQ-QK-V36" id="kFy-gx-X6O"/>
             </connections>
             <point key="canvasLocation" x="-196.5" y="-22"/>

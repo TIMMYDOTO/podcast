@@ -40,6 +40,21 @@ class EpisodesController: UITableViewController {
         super.viewDidLoad()
         setupTableView()
         setupNavigationBarButtons()
+        setupHeaderView()
+
+        
+    }
+    
+    fileprivate func setupHeaderView() {
+        let headerView = UIView()
+        headerView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 80)
+        tableView.tableHeaderView = headerView
+        headerView.addSubview(mainDescriptionLabel)
+      
+    mainDescriptionLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 5).isActive = true
+        mainDescriptionLabel.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: 5).isActive = true
+         mainDescriptionLabel.rightAnchor.constraint(equalTo: headerView.rightAnchor, constant: -5).isActive = true
+         mainDescriptionLabel.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -5).isActive = true
     }
     
     //MARK:- Setup Work
@@ -147,6 +162,7 @@ class EpisodesController: UITableViewController {
         }
         return [downloadAction]
     }
+    
 }
 
 extension EpisodesController: ReadMoreEpisodeDelegate {
