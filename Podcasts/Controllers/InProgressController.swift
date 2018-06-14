@@ -15,7 +15,7 @@ class InProgressController: UITableViewController {
     var inprogressEpisodes = UserDefaults.standard.inProgressEpisodes()
     var incompleteEpisodesTime = [Double]()
     var inProgressEpisodesTime = UserDefaults.standard.inProgressEpisodesTimes()
-
+    let cellId = "cellId"
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -26,8 +26,17 @@ class InProgressController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let nib = UINib(nibName: "InProgressCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: cellId)
+        setupNavigationBar()
     }
     
+    
+    fileprivate func setupNavigationBar() {
+        navigationItem.title = "In Progress"
+    }
+    
+    //MARK:- UITableView
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return incompleteEpisodes.count
@@ -35,8 +44,9 @@ class InProgressController: UITableViewController {
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = incompleteEpisodes[indexPath.row].title
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! InProgressCell
+        let inProgressEpisodes = incompleteEpisodes[indexPath.row]
+        cell.episode = inProgressEpisodes
         return cell
     }
     
@@ -48,7 +58,20 @@ class InProgressController: UITableViewController {
         let durationInSeconds = Float64(time)
         let seekTime = CMTimeMakeWithSeconds(durationInSeconds, Int32(NSEC_PER_SEC))
         mainTabBarController?.playerDetailsView.player.seek(to: seekTime)
-
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        let episode = self.incompleteEpisodes[indexPath.row]
+        let time = self.inProgressEpisodesTime[indexPath.row]
+        incompleteEpisodes.remove(at: indexPath.row)
+        incompleteEpisodesTime.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .fade)
+        UserDefaults.standard.deleteEpisode(episode: episode)
+        UserDefaults.standard.deleteInProgressTime(time: time)
         
     }
+    
+    
+    
 }

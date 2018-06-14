@@ -64,6 +64,19 @@ extension UserDefaults {
 
     }
     
+    func deleteInProgressTime(time: Double) {
+        let inProgressTime = inProgressEpisodesTimes()
+        let filteredTime = inProgressTime.filter { (time) -> Bool in
+            return time != time
+        }
+        do {
+            let data = try JSONEncoder().encode(filteredTime)
+            UserDefaults.standard.set(data, forKey: UserDefaults.inProgressEpisodeTimeKey)
+        } catch let encodeErr {
+            print("Failed to encode episode:", encodeErr)
+        }
+    }
+    
     func downloadEpisode(episode: Episode) {
         do {
             var episodes = downloadedEpisodes()
