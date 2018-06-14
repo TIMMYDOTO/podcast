@@ -71,7 +71,4 @@ class InProgressController: UITableViewController {
         UserDefaults.standard.deleteInProgressTime(time: time)
         
     }
-    
-    
-    
 }
