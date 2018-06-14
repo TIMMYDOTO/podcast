@@ -122,8 +122,8 @@ class EpisodesController: UITableViewController {
     let mainDescriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 11)
         label.numberOfLines = 0
-        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     

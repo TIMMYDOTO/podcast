@@ -19,28 +19,41 @@ extension UserDefaults {
     
     
     
-    func inProgressEpisodeTime(time: Double) {
-        do {
-            var currentTime = inProgressEpisodesTimes()
-            currentTime.insert(time, at: 0)
-            let data = try JSONEncoder().encode(currentTime)
-            UserDefaults.standard.set(data, forKey: UserDefaults.inProgressEpisodeTimeKey)
-        } catch let encodeErr {
-            print("Failed to encode episode:", encodeErr)
+        func inProgressEpisodeTime(time: Double) {
+                var currentTime = inProgressEpisodesTimes()
+                currentTime.insert(time, at: 0)
+                UserDefaults.standard.set(currentTime, forKey: UserDefaults.inProgressEpisodeTimeKey)
         }
-    }
+    
     
     func inProgressEpisodesTimes() -> [Double] {
-        guard let inProgressEpisodeTime = data(forKey: UserDefaults.inProgressEpisodeTimeKey) else { return [] }
-        do {
-            let episodesTime = try JSONDecoder().decode([Double].self, from: inProgressEpisodeTime)
-            return episodesTime
-        } catch let decodeErr{
-            print("Failed to decode:", decodeErr)
-        }
-        return []
+        let inProgressEpisodeTime = array(forKey: UserDefaults.inProgressEpisodeTimeKey) as? [Double] ?? [Double]()
+        return inProgressEpisodeTime
+
     }
     
+//    func inProgressEpisodeTime(time: Double) {
+//        do {
+//            var currentTime = inProgressEpisodesTimes()
+//            currentTime.insert(time, at: 0)
+//            let data = try JSONEncoder().encode(currentTime)
+//            UserDefaults.standard.set(data, forKey: UserDefaults.inProgressEpisodeTimeKey)
+//        } catch let encodeErr {
+//            print("Failed to encode episode:", encodeErr)
+//        }
+//    }
+//
+//    func inProgressEpisodesTimes() -> [Double] {
+//        guard let inProgressEpisodeTime = data(forKey: UserDefaults.inProgressEpisodeTimeKey) else { return [] }
+//        do {
+//            let episodesTime = try JSONDecoder().decode([Double].self, from: inProgressEpisodeTime)
+//            return episodesTime
+//        } catch let decodeErr{
+//            print("Failed to decode:", decodeErr)
+//        }
+//        return []
+//    }
+
     func inProgressEpisode(episode: Episode) {
         do {
             var episodes = inProgressEpisodes()
@@ -64,17 +77,9 @@ extension UserDefaults {
 
     }
     
-    func deleteInProgressTime(time: Double) {
-        let inProgressTime = inProgressEpisodesTimes()
-        let filteredTime = inProgressTime.filter { (time) -> Bool in
-            return time != time
-        }
-        do {
-            let data = try JSONEncoder().encode(filteredTime)
-            UserDefaults.standard.set(data, forKey: UserDefaults.inProgressEpisodeTimeKey)
-        } catch let encodeErr {
-            print("Failed to encode episode:", encodeErr)
-        }
+    func deleteInProgressTime(time: Double, indexPath: Int) {
+        var inProgressTime = inProgressEpisodesTimes()
+        inProgressTime.remove(at: indexPath)
     }
     
     func downloadEpisode(episode: Episode) {
