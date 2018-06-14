@@ -11,7 +11,6 @@ import AVKit
 import MediaPlayer
 
 class PlayerDetailsView: UIView {
-    
     var episode: Episode! {
         didSet {
             miniTitleLabel.text = episode.title
@@ -35,6 +34,7 @@ class PlayerDetailsView: UIView {
         }
     }
     
+    var inProgressEpisodes = [Episode]()
     fileprivate func  setupNowPlayingInfo() {
         var nowPlayingInfo = [String : Any]()
         nowPlayingInfo[MPMediaItemPropertyTitle] = episode.title
@@ -373,7 +373,6 @@ class PlayerDetailsView: UIView {
         }
     }
     
-    
     @IBOutlet weak var episodeTitleLabel: UILabel! {
         didSet {
             episodeTitleLabel.numberOfLines = 2
@@ -410,9 +409,8 @@ class PlayerDetailsView: UIView {
             player.rate = 1.0
             playbackSpeedButton.setTitle("\(player.rate)", for: .normal)
         }
-        
-        
-        }
+    }
+    
     
     @objc func handlePlayPause() {
         print("Trying to play and pause")
@@ -422,6 +420,10 @@ class PlayerDetailsView: UIView {
             miniPlayPausebutton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             enlargeEpisodeImageView()
             self.setupElapsedTime(playbackRate: 1)
+            print(episode)
+            let currentTime = player.currentTime().seconds
+            UserDefaults.standard.inProgressEpisodeTime(time: currentTime)
+            UserDefaults.standard.inProgressEpisode(episode: episode)
         } else {
             player.pause()
             playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
@@ -432,5 +434,4 @@ class PlayerDetailsView: UIView {
     }
     
 }
-
 

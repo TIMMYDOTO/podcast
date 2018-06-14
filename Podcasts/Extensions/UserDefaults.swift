@@ -7,12 +7,62 @@
 //
 
 import Foundation
-
+import AVFoundation
 
 extension UserDefaults {
     
     static let favoritedPodcastKey = "favoritedPodcastKey"
     static let downloadEpisodesKey = "downloadEpisodesKey"
+    static let inProgressEpisodeKey = "inProgressEpisodeKey"
+    static let inProgressEpisodeTimeKey = "inProgressEpisodeTimeKey"
+    
+    
+    
+    
+    func inProgressEpisodeTime(time: Double) {
+        do {
+            var currentTime = inProgressEpisodesTimes()
+            currentTime.insert(time, at: 0)
+            let data = try JSONEncoder().encode(currentTime)
+            UserDefaults.standard.set(data, forKey: UserDefaults.inProgressEpisodeTimeKey)
+        } catch let encodeErr {
+            print("Failed to encode episode:", encodeErr)
+        }
+    }
+    
+    func inProgressEpisodesTimes() -> [Double] {
+        guard let inProgressEpisodeTime = data(forKey: UserDefaults.inProgressEpisodeTimeKey) else { return [] }
+        do {
+            let episodesTime = try JSONDecoder().decode([Double].self, from: inProgressEpisodeTime)
+            return episodesTime
+        } catch let decodeErr{
+            print("Failed to decode:", decodeErr)
+        }
+        return []
+    }
+    
+    func inProgressEpisode(episode: Episode) {
+        do {
+            var episodes = inProgressEpisodes()
+            episodes.insert(episode, at: 0)
+            let data = try JSONEncoder().encode(episodes)
+            UserDefaults.standard.set(data, forKey: UserDefaults.inProgressEpisodeKey)
+        } catch let encodeErr {
+            print("Failed to encode episode:", encodeErr)
+        }
+    }
+    
+    func inProgressEpisodes() -> [Episode] {
+        guard let inprogressEpisodes = data(forKey: UserDefaults.inProgressEpisodeKey) else { return [] }
+        do {
+        let episodes = try JSONDecoder().decode([Episode].self, from: inprogressEpisodes)
+        return episodes
+    } catch let decodeErr{
+        print("Failed to decode:", decodeErr)
+    }
+    return []
+
+    }
     
     func downloadEpisode(episode: Episode) {
         do {

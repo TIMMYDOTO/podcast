@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
@@ -17,7 +18,7 @@ class MainTabBarController: UITabBarController {
         setupViewControllers()
         setupPlayerDetailsView()
     }
-    
+        
     @objc func minimizePlayerDetails() {
         maximizedTopAnchorConstraint.isActive = false
         bottomAnchorConstraint.constant = view.frame.height
@@ -46,8 +47,7 @@ class MainTabBarController: UITabBarController {
             self.playerDetailsView.miniPlayerView.alpha = 0
         })
     }
-    
-    
+        
     //MARK:- Setup Functions
     
     let playerDetailsView = PlayerDetailsView.initFromNib()
