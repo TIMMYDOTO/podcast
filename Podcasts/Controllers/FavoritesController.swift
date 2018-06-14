@@ -16,13 +16,13 @@ class FavoritesController: UICollectionViewController, UICollectionViewDelegateF
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
+        setupNavigationBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         podcasts = UserDefaults.standard.savedPodcasts()
         collectionView?.reloadData()
-        UIApplication.mainTabBarController()?.viewControllers?[1].tabBarItem.badgeValue = nil
     }
     
     // MARK:- UICollectionView Delegate / Spacing Methods
@@ -33,6 +33,11 @@ class FavoritesController: UICollectionViewController, UICollectionViewDelegateF
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
         collectionView?.addGestureRecognizer(gesture)
     }
+    
+    fileprivate func setupNavigationBar() {
+        navigationItem.title = "Favorites"
+    }
+    
     
     @objc func handleLongPress(gesture: UILongPressGestureRecognizer) {
         print("Captured press")

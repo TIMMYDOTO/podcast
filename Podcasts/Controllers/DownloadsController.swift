@@ -52,7 +52,9 @@ class DownloadsController: UITableViewController {
     fileprivate func setupTableView() {
         let nib = UINib(nibName: "EpisodeCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: cellId)
-    }
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 450
+        }
     
     //MARK:- UITableView
     
@@ -63,11 +65,8 @@ class DownloadsController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! EpisodeCell
         cell.episode = self.episodes[indexPath.row]
+        cell.delegate = self
         return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 134
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -91,7 +90,12 @@ class DownloadsController: UITableViewController {
             present(alertController, animated: true)
         }
     }
-    
-    
-    
 }
+
+extension DownloadsController: ReadMoreEpisodeDelegate {
+    func moreTapped(cell: EpisodeCell) {
+        tableView.beginUpdates()
+        tableView.endUpdates()
+    }
+}
+

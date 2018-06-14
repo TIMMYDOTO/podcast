@@ -11,7 +11,7 @@ import UIKit
 class HomeController: UITableViewController {
     
     let cellId = "cellId"
-    let controllers = ["Favorites", "In Progress"]
+    let controllers = ["Favorites", "Unplayed", "In Progress"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +41,10 @@ class HomeController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let layout = UICollectionViewFlowLayout()
         let favoritesController = FavoritesController(collectionViewLayout: layout)
-        navigationController?.pushViewController(favoritesController, animated: true)
+        let unplayedController = UnplayedController()
+        let inProgressController = InProgressController()
+        let vc = [favoritesController, unplayedController, inProgressController]
+        navigationController?.pushViewController(vc[indexPath.row], animated: true)
     }
 }
 

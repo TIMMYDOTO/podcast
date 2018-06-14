@@ -11,12 +11,12 @@ import AVKit
 import MediaPlayer
 
 class PlayerDetailsView: UIView {
-    
     var episode: Episode! {
         didSet {
             miniTitleLabel.text = episode.title
             episodeTitleLabel.text = episode.title
             authorLabel.text = episode.author
+            episodeDescriptionLabel.text = episode.description
             setupNowPlayingInfo()
             playEpisode()
             setupAudioSession()
@@ -34,6 +34,7 @@ class PlayerDetailsView: UIView {
         }
     }
     
+    var inProgressEpisodes = [Episode]()
     fileprivate func  setupNowPlayingInfo() {
         var nowPlayingInfo = [String : Any]()
         nowPlayingInfo[MPMediaItemPropertyTitle] = episode.title
@@ -88,6 +89,7 @@ class PlayerDetailsView: UIView {
     
     var panGesture: UIPanGestureRecognizer!
     
+    
     fileprivate func setupGestures() {
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapMaximize)))
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
@@ -96,21 +98,22 @@ class PlayerDetailsView: UIView {
     }
     
     @objc func handleDismissalPan(gesture: UIPanGestureRecognizer) {
-        print("maximizedStackView dismissal")
         if gesture.state == .changed {
-            let translation = gesture.translation(in: superview)
-            maximizedStackView.transform = CGAffineTransform(translationX: 0, y: translation.y)
+//            let translation = gesture.translation(in: superview)
+//            maximizedStackView.transform = CGAffineTransform(translationX: 0, y: translation.y)
+            scrollView.flashScrollIndicators()
         } else if gesture.state == .ended {
             let translation = gesture.translation(in: superview)
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 self.maximizedStackView.transform = .identity
-                if translation.y > 50 {
+                if translation.y > 100 {
                     let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
                     mainTabBarController?.minimizePlayerDetails()
                 }
             })
         }
     }
+    @IBOutlet weak var scrollView: UIScrollView!
     
     fileprivate func setupAudioSession() {
         do {
@@ -293,6 +296,7 @@ class PlayerDetailsView: UIView {
     //MARK:- IB Actions and Outlets
     
     
+    @IBOutlet weak var episodeDescriptionLabel: UILabel!
     @IBOutlet weak var miniEpisodeImageView: UIImageView!
     @IBOutlet weak var miniTitleLabel: UILabel!
     @IBOutlet weak var miniPlayPausebutton: UIButton! {
@@ -369,13 +373,13 @@ class PlayerDetailsView: UIView {
         }
     }
     
-    
     @IBOutlet weak var episodeTitleLabel: UILabel! {
         didSet {
             episodeTitleLabel.numberOfLines = 2
         }
     }
     
+
     @IBOutlet weak var authorLabel: UILabel!
     @IBOutlet weak var playPauseButton: UIButton! {
         didSet {
@@ -387,6 +391,27 @@ class PlayerDetailsView: UIView {
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var currentTimeSlider: UISlider!
     
+    @IBOutlet weak var playbackSpeedButton: UIButton!
+    @IBAction func playbackSpeedBtnPressed(_ sender: UIButton) {
+            sender.tag += 1
+            if sender.tag > 3 { sender.tag = 0}
+        switch  sender.tag {
+        case 1:
+            player.rate = 1.5
+            playbackSpeedButton.setTitle("\(player.rate)", for: .normal)
+        case 2:
+            player.rate = 2.0
+            playbackSpeedButton.setTitle("\(player.rate)", for: .normal)
+        case 3:
+            player.rate = 0.5
+            playbackSpeedButton.setTitle("\(player.rate)", for: .normal)
+        default:
+            player.rate = 1.0
+            playbackSpeedButton.setTitle("\(player.rate)", for: .normal)
+        }
+    }
+    
+    
     @objc func handlePlayPause() {
         print("Trying to play and pause")
         if player.timeControlStatus == .paused {
@@ -395,6 +420,10 @@ class PlayerDetailsView: UIView {
             miniPlayPausebutton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             enlargeEpisodeImageView()
             self.setupElapsedTime(playbackRate: 1)
+            print(episode)
+            let currentTime = player.currentTime().seconds
+            UserDefaults.standard.inProgressEpisodeTime(time: currentTime)
+            UserDefaults.standard.inProgressEpisode(episode: episode)
         } else {
             player.pause()
             playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
@@ -405,5 +434,4 @@ class PlayerDetailsView: UIView {
     }
     
 }
-
 

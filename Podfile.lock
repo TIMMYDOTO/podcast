@@ -1,9 +1,9 @@
 PODS:
-  - Alamofire (4.6.0)
+  - Alamofire (4.7.2)
   - FeedKit (7.0.1)
-  - SDWebImage (4.3.0):
-    - SDWebImage/Core (= 4.3.0)
-  - SDWebImage/Core (4.3.0)
+  - SDWebImage (4.4.1):
+    - SDWebImage/Core (= 4.4.1)
+  - SDWebImage/Core (4.4.1)
 
 DEPENDENCIES:
   - Alamofire (~> 4.6)
@@ -11,9 +11,9 @@ DEPENDENCIES:
   - SDWebImage (~> 4.0)
 
 SPEC CHECKSUMS:
-  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
+  Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
   FeedKit: 9be69ab57ef0eb922ee4b6c31cb6b8840a5bbb29
-  SDWebImage: 6da6c8bca115addc4de8613362e1b15f66333825
+  SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
 
 PODFILE CHECKSUM: 510f644cbfb625aa9e52823f2d7704564c7f8255
 

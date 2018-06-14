@@ -17,26 +17,44 @@ class EpisodesController: UITableViewController {
             fetchEpisodes()
         }
     }
+    var feed: RSSFeed?
     
     fileprivate func fetchEpisodes()  {
         print("Looking for episodes at feed url:", podcast?.feedUrl ?? "")
         guard let feedUrl = podcast?.feedUrl else { return }
         
-        APIService.shared.fetchEpisodes(feedUrl: feedUrl) { (episodes) in
+        APIService.shared.fetchEpisodes(feedUrl: feedUrl) { (episodes, feed) in
+            self.feed = feed
             self.episodes = episodes
             DispatchQueue.main.async {
                 self.tableView.reloadData()
+                self.mainDescriptionLabel.text = feed.description
             }
         }
     }
     
     fileprivate let cellId = "cellId"
     var episodes = [Episode]()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
         setupNavigationBarButtons()
+        setupHeaderView()
+
+        
+    }
+    
+    fileprivate func setupHeaderView() {
+        let headerView = UIView()
+        headerView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 80)
+        tableView.tableHeaderView = headerView
+        headerView.addSubview(mainDescriptionLabel)
+      
+    mainDescriptionLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 5).isActive = true
+        mainDescriptionLabel.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: 5).isActive = true
+         mainDescriptionLabel.rightAnchor.constraint(equalTo: headerView.rightAnchor, constant: -5).isActive = true
+         mainDescriptionLabel.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -5).isActive = true
     }
     
     //MARK:- Setup Work
@@ -70,12 +88,7 @@ class EpisodesController: UITableViewController {
         listOfPodcasts.append(podcast)
         let data = NSKeyedArchiver.archivedData(withRootObject: listOfPodcasts)
         UserDefaults.standard.set(data, forKey: UserDefaults.favoritedPodcastKey)
-        showBadgeHighlight()
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "heart"), style: .plain, target: nil, action: nil)
-    }
-    
-    fileprivate func showBadgeHighlight() {
-        UIApplication.mainTabBarController()?.viewControllers?[1].tabBarItem.badgeValue = "New"
     }
     
     fileprivate func setupTableView() {
@@ -84,7 +97,7 @@ class EpisodesController: UITableViewController {
         tableView.tableFooterView = UIView()
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 450
-    }
+  }
     
     //MARK:- UITableView
     
@@ -98,6 +111,22 @@ class EpisodesController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return episodes.isEmpty ? 200 : 0
     }
+    
+    let headerView: UIView = {
+        let headerView = UIView()
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+        headerView.backgroundColor = .red
+        return headerView
+    }()
+
+    let mainDescriptionLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 11)
+        label.numberOfLines = 0
+        return label
+    }()
+    
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let episode = self.episodes[indexPath.row]
@@ -123,10 +152,12 @@ class EpisodesController: UITableViewController {
             let episode = self.episodes[indexPath.row]
             UserDefaults.standard.downloadEpisode(episode: episode)
             APIService.shared.downloadEpisode(episode: episode)
-            
+            let cell = tableView.cellForRow(at: indexPath) as! EpisodeCell
+            cell.downloadedImage.isHidden = false
         }
         return [downloadAction]
     }
+    
 }
 
 extension EpisodesController: ReadMoreEpisodeDelegate {
