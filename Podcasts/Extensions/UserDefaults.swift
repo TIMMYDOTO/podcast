@@ -117,6 +117,19 @@ extension UserDefaults {
         }
     }
     
+    func deleteEpisodeInProgress(episode: Episode) {
+       let inProgressEpisodesArray = inProgressEpisodes()
+        let filteredInProgressEpisodesArray = inProgressEpisodesArray.filter { (episode) -> Bool in
+            return episode.title != episode.title
+        }
+        do {
+            let data = try JSONEncoder().encode(filteredInProgressEpisodesArray)
+            UserDefaults.standard.set(data, forKey: UserDefaults.inProgressEpisodeKey)
+        } catch let encodeErr {
+            print("Encode Error", encodeErr)
+        }
+    }
+    
     func savedPodcasts() -> [Podcast] {
         
         guard let savedPodcastsData = UserDefaults.standard.data(forKey: UserDefaults.favoritedPodcastKey) else { return [] }

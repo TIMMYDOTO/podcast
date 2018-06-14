@@ -66,9 +66,8 @@ class InProgressController: UITableViewController {
         let time = self.inProgressEpisodesTime[indexPath.row]
         incompleteEpisodes.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .fade)
-        UserDefaults.standard.deleteEpisode(episode: episode)
-        let indexPath = indexPath.row
-        UserDefaults.standard.deleteInProgressTime(time: time, indexPath: indexPath)
+        UserDefaults.standard.deleteEpisodeInProgress(episode: episode)
+        UserDefaults.standard.deleteInProgressTime(time: time, indexPath: indexPath.row)
         
     }
 }
