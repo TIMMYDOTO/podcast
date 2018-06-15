@@ -45,8 +45,9 @@ class APIService {
     
     func fetchEpisodes(feedUrl: String, completionHandler: @escaping ([Episode], RSSFeed) -> ()) {
         
-        let secureFeedUrl = feedUrl.contains("https") ? feedUrl : feedUrl.replacingOccurrences(of: "http", with: "https")
-        guard let url = URL(string: secureFeedUrl) else { return }
+//        let secureFeedUrl = feedUrl.contains("https") ? feedUrl : feedUrl.replacingOccurrences(of: "http", with: "https")
+//        guard let url = URL(string: secureFeedUrl) else { return }
+        guard let url = URL(string: feedUrl) else { return }
         DispatchQueue.global(qos: .background).async {
             let parser = FeedParser(URL: url)
             parser?.parseAsync(result: { (result) in
