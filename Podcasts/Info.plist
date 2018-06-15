@@ -28,6 +28,19 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>joeroganexp.joerogan.libsynpro.com/rss</key>
+			<dict>
+				<key>NSExceptionRequiresForwardSecrecy</key>
+				<false/>
+				<key>NSExceptionMinimumTLSVersion</key>
+				<string>TLSv1.1</string>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
 			<key>mzstatic.com</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>

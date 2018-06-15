@@ -20,7 +20,7 @@ class APIService {
     
     func downloadEpisode(episode: Episode) {
         print("Downloading episode using Alamofire at url", episode.streamUrl)
-        
+    
         let downloadRequest = DownloadRequest.suggestedDownloadDestination()
         Alamofire.download(episode.streamUrl, to: downloadRequest).downloadProgress { (progress) in
             print(progress.fractionCompleted)
@@ -86,7 +86,6 @@ class APIService {
     
     func fetchPopularPodcasts(completionHandler: @escaping ([Podcast]) -> ()) {
         let parameters = ["term": "podcast", "media" : "podcast", "sort" : "popular"]
-        
         Alamofire.request(baseiTunesSearchURL, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: nil).responseData { (dataResponse) in
             if let err = dataResponse.error {
                 print("Failed to contact yahoo", err)

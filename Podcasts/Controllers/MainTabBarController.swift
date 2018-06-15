@@ -73,7 +73,7 @@ class MainTabBarController: UITabBarController {
     
     func setupViewControllers() {
         viewControllers = [
-            generateNavigationController(with: HomeController(), title: "Home", image: #imageLiteral(resourceName: "home")),
+            generateNavigationController(with: HomeController(), title: "Home", image: #imageLiteral(resourceName: "home1")),
             generateNavigationController(with: StoreController(), title: "Store", image: #imageLiteral(resourceName: "search")),
             generateNavigationController(with: DownloadsController(), title: "Downloads", image: #imageLiteral(resourceName: "downloads"))
         ]
