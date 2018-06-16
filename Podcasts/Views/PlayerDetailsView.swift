@@ -97,6 +97,7 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
         miniPlayerView.addGestureRecognizer(panGesture)
         let scrollViewPanGesture = UIPanGestureRecognizer(target: self, action: #selector(handleDismissalPan))
         scrollViewPanGesture.delegate = self
+        scrollViewPanGesture.cancelsTouchesInView = false
         scrollView.addGestureRecognizer(scrollViewPanGesture)
 
     }
@@ -237,6 +238,11 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
     
     fileprivate func setupInterruptionObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption), name: .AVAudioSessionInterruption, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: Notification.Name.UIApplicationWillTerminate, object: nil)
+    }
+    
+    @objc func appMovedToBackground() {
+        saveInProgress()
     }
     
     @objc fileprivate func handleInterruption(notification: Notification) {
@@ -422,6 +428,13 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
         }
     }
     
+    func saveInProgress() {
+        let currentTime = player.currentTime().seconds
+        guard let currentEpisode = episode else { return }
+        UserDefaults.standard.inProgressEpisodeTime(time: currentTime)
+        UserDefaults.standard.inProgressEpisode(episode: currentEpisode)
+    }
+    
     
     @objc func handlePlayPause() {
         print("Trying to play and pause")
@@ -432,9 +445,6 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
             enlargeEpisodeImageView()
             self.setupElapsedTime(playbackRate: 1)
             print(episode)
-            let currentTime = player.currentTime().seconds
-            UserDefaults.standard.inProgressEpisodeTime(time: currentTime)
-            UserDefaults.standard.inProgressEpisode(episode: episode)
         } else {
             player.pause()
             playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)

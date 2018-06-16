@@ -12,6 +12,7 @@ import UIKit
 class GenrePodcasts: UITableViewController {
     
     var genreIndex: Int?
+    var genreName: String?
     let cellId = "cellId"
     var podcasts = [Podcast]()
     
@@ -30,7 +31,7 @@ class GenrePodcasts: UITableViewController {
     }
     
     func setupNavigationBar() {
-        navigationItem.title = "Genre Podcasts"
+        navigationItem.title = genreName
     }
     
     //MARK:- UITableView
@@ -46,6 +47,18 @@ class GenrePodcasts: UITableViewController {
         let podcasts = self.podcasts[indexPath.row]
         cell.podcast = podcasts
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        activityIndicatorView.color = .darkGray
+        activityIndicatorView.startAnimating()
+        return activityIndicatorView
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return podcasts.isEmpty ? 200 : 0
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

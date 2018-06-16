@@ -40,6 +40,7 @@ class CategoriesController: UITableViewController {
         return cell
     }
     
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return genres.count
     }
@@ -47,6 +48,7 @@ class CategoriesController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let genreVC = GenrePodcasts()
         navigationController?.pushViewController(genreVC, animated: true)
+        genreVC.genreName = genres[indexPath.row]
         genreVC.genreIndex = genreIndexes[indexPath.row]
     }
     
