@@ -28,6 +28,8 @@ class InProgressController: UITableViewController {
         super.viewDidLoad()
         let nib = UINib(nibName: "InProgressCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: cellId)
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 450
         setupNavigationBar()
     }
     
@@ -47,6 +49,12 @@ class InProgressController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! InProgressCell
         let inProgressEpisodes = incompleteEpisodes[indexPath.row]
         cell.episode = inProgressEpisodes
+        let time = self.incompleteEpisodesTime[indexPath.row]
+        if let fullTime = self.incompleteEpisodes[indexPath.row].duration {
+            let timeRemaining = fullTime - time
+            cell.durationLabel.text = timeRemaining.asString(style: .abbreviated) + " remaining"
+        }
+        cell.delegate = self
         return cell
     }
     
@@ -70,4 +78,11 @@ class InProgressController: UITableViewController {
         UserDefaults.standard.deleteInProgressTime(time: time, indexPath: indexPath.row)
         
     }
+}
+
+extension InProgressController: ReadMoreInProgressEpisodeDelegate {
+    func moreTapped(cell: InProgressCell) {
+            tableView.beginUpdates()
+            tableView.endUpdates()
+            }
 }

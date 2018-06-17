@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol ReadMoreInProgressEpisodeDelegate {
+    func moreTapped(cell: InProgressCell)
+}
+
 
 class  InProgressCell: UITableViewCell {
 
@@ -25,7 +29,7 @@ class  InProgressCell: UITableViewCell {
             }
         }
         
-        var delegate: ReadMoreEpisodeDelegate?
+        var delegate: ReadMoreInProgressEpisodeDelegate?
         var isExpanded: Bool = false
         
         
@@ -49,7 +53,7 @@ class  InProgressCell: UITableViewCell {
             isExpanded = !isExpanded
             descriptionLabel.numberOfLines = isExpanded ? 0 : 2
             moreButton.setTitle(isExpanded ? "Read less" : "Read more", for: .normal)
-//            delegate?.moreTapped(cell: self)
+            delegate?.moreTapped(cell: self)
         }
         
         override func setSelected(_ selected: Bool, animated: Bool) {
