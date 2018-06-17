@@ -22,14 +22,12 @@ class InProgressController: UITableViewController {
         incompleteEpisodes = UserDefaults.standard.inProgressEpisodes()
         incompleteEpisodesTime = UserDefaults.standard.inProgressEpisodesTimes()
         tableView.reloadData()
+        setupTableView()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let nib = UINib(nibName: "InProgressCell", bundle: nil)
-        tableView.register(nib, forCellReuseIdentifier: cellId)
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 450
+     
         setupNavigationBar()
     }
     
@@ -39,6 +37,13 @@ class InProgressController: UITableViewController {
     }
     
     //MARK:- UITableView
+    
+    fileprivate func setupTableView() {
+        let nib = UINib(nibName: "InProgressCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: cellId)
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 450
+    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return incompleteEpisodes.count

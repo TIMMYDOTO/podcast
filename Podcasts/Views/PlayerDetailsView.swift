@@ -111,12 +111,12 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
         if gesture.state == .changed {
 //            let translation = gesture.translation(in: superview)
 //            maximizedStackView.transform = CGAffineTransform(translationX: 0, y: translation.y)
-            scrollView.flashScrollIndicators()
+//            scrollView.flashScrollIndicators()
         } else if gesture.state == .ended {
             let translation = gesture.translation(in: superview)
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 self.maximizedStackView.transform = .identity
-                if translation.y > 250 {
+                if translation.y > 150 {
                     let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
                     mainTabBarController?.minimizePlayerDetails()
                 }
@@ -308,6 +308,7 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
     deinit {
         print("PlayerDetailsView memory being reclaimed...")
         NotificationCenter.default.removeObserver(self, name: .AVAudioSessionInterruption, object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.UIApplicationWillTerminate, object: nil)
     }
     
     //MARK:- IB Actions and Outlets
@@ -444,7 +445,6 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
             miniPlayPausebutton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             enlargeEpisodeImageView()
             self.setupElapsedTime(playbackRate: 1)
-            print(episode)
         } else {
             player.pause()
             playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
