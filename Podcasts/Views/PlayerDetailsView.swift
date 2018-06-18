@@ -3,7 +3,7 @@
 //  Podcasts
 //
 //  Created by Ivan Amidžić on 05/03/2018.
-//  Copyright © 2018 Ivan Amidžić. All rights reserved.
+//  Copyright © 2018 2018 BZG Inc. All rights reserved.
 //
 
 import UIKit
@@ -226,6 +226,7 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
         MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration] = durationSeconds
     }
     
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         setupInterruptionObserver()
@@ -234,6 +235,7 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
         observePlayerCurrentTime()
         observeBoundaryTime()
         volumeSlider.setValue(AVAudioSession.sharedInstance().outputVolume, animated: true)
+    
     }
     
     fileprivate func setupInterruptionObserver() {
@@ -359,7 +361,12 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
     }
     
     @IBAction func handleVolumeChanged(_ sender: UISlider) {
-            player.volume = sender.value
+        player.volume = sender.value
+        
+    }
+    
+    func setVolumeTo(volume: Float) {
+        (MPVolumeView().subviews.filter{NSStringFromClass($0.classForCoder) == "MPVolumeSlider"}.first as? UISlider)?.setValue(volume, animated: false)
     }
     
     
@@ -455,4 +462,7 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
     }
     
 }
+
+
+
 
