@@ -235,13 +235,36 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
         observePlayerCurrentTime()
         observeBoundaryTime()
         volumeSlider.setValue(AVAudioSession.sharedInstance().outputVolume, animated: true)
+        setupVolumeView()
+    }
     
+    fileprivate func setupVolumeView() {
+        let volumeView = MPVolumeView(frame: .zero)
+        volumeView.alpha = 0.001
+        maximizedStackView.addSubview(volumeView)
     }
     
     fileprivate func setupInterruptionObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption), name: .AVAudioSessionInterruption, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: Notification.Name.UIApplicationWillTerminate, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(volumeChanged(notification:)),
+                                               name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"),
+                                            object: nil)
     }
+    
+    
+    @objc func volumeChanged(notification: NSNotification) {
+        
+        if let userInfo = notification.userInfo {
+            if let volumeChangeType = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String {
+                if volumeChangeType == "ExplicitVolumeChange" {
+                    let volume = notification.userInfo!["AVSystemController_AudioVolumeNotificationParameter"] as! Float
+                    volumeSlider.value = volume
+                }
+            }
+        }
+    }
+    
     
     @objc func appMovedToBackground() {
         saveInProgress()
@@ -361,12 +384,8 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
     }
     
     @IBAction func handleVolumeChanged(_ sender: UISlider) {
-        player.volume = sender.value
+        MPVolumeView.setVolume(sender.value)
         
-    }
-    
-    func setVolumeTo(volume: Float) {
-        (MPVolumeView().subviews.filter{NSStringFromClass($0.classForCoder) == "MPVolumeSlider"}.first as? UISlider)?.setValue(volume, animated: false)
     }
     
     
@@ -461,8 +480,22 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
         }
     }
     
+    
+
 }
 
+extension MPVolumeView {
+    static func setVolume(_ volume: Float) {
+        let volumeView = MPVolumeView()
+        volumeView.isHidden = true
+        volumeView.alpha = 0.01
+        let slider = volumeView.subviews.first(where: { $0 is UISlider }) as? UISlider
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.01) {
+            slider?.value = volume;
+        }
+    }
+}
 
 
 
