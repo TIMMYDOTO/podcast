@@ -21,10 +21,10 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g5c-Nx-PyR">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="810.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="1040"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Hyg-Cv-9MF">
-                                    <rect key="frame" x="24" y="0.0" width="327" height="786.5"/>
+                                    <rect key="frame" x="24" y="0.0" width="327" height="1016"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E13-X5-9tY">
                                             <rect key="frame" x="0.0" y="0.0" width="327" height="44"/>
@@ -195,15 +195,13 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SrZ-f2-6bU">
-                                            <rect key="frame" x="0.0" y="766" width="327" height="20.5"/>
+                                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" delaysContentTouches="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Tct-VM-k57">
+                                            <rect key="frame" x="0.0" y="766" width="327" height="250"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="087-1J-uTW"/>
+                                                <constraint firstAttribute="height" constant="250" id="ZiN-0K-qOh"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                        </tableView>
                                     </subviews>
                                 </stackView>
                             </subviews>
@@ -292,6 +290,7 @@
                 <constraint firstItem="g5c-Nx-PyR" firstAttribute="height" secondItem="pal-Wv-TDz" secondAttribute="height" priority="250" id="aw5-SY-n7m"/>
                 <constraint firstItem="bHb-kW-wOJ" firstAttribute="leading" secondItem="GZi-vr-g0r" secondAttribute="leading" id="wRq-wX-aJA"/>
             </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="GZi-vr-g0r"/>
             <connections>
                 <outlet property="authorLabel" destination="3hN-tW-HBb" id="96w-Bm-S4I"/>
@@ -310,6 +309,7 @@
                 <outlet property="playPauseButton" destination="uSA-3S-MlB" id="bDP-SJ-GMk"/>
                 <outlet property="playbackSpeedButton" destination="bP0-kk-Rc4" id="nHP-Vr-Px3"/>
                 <outlet property="scrollView" destination="0YT-bV-Lhl" id="Hb4-bi-Tf8"/>
+                <outlet property="tableView" destination="Tct-VM-k57" id="YDX-PX-7Mo"/>
                 <outlet property="volumeSlider" destination="WUQ-QK-V36" id="kFy-gx-X6O"/>
             </connections>
             <point key="canvasLocation" x="-196.5" y="-22"/>

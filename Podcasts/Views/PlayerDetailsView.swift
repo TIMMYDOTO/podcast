@@ -10,7 +10,7 @@ import UIKit
 import AVKit
 import MediaPlayer
 
-class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
+class PlayerDetailsView: UIView, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource {
     var episode: Episode! {
         didSet {
             miniTitleLabel.text = episode.title
@@ -34,6 +34,7 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
         }
     }
     
+    var currentChapterArray = [Chapter]()
     var inProgressEpisodes = [Episode]()
     fileprivate func  setupNowPlayingInfo() {
         var nowPlayingInfo = [String : Any]()
@@ -47,6 +48,7 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
         avPlayer.automaticallyWaitsToMinimizeStalling = false
         return avPlayer
     }()
+    var playerItem: AVPlayerItem!
     
     fileprivate func  playEpisode() {
         if episode.fileUrl != nil {
@@ -54,11 +56,36 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
         } else {
             print("Trying to play episode at url:", episode.streamUrl)
             guard let url = URL(string: episode.streamUrl) else { return }
-            let playerItem = AVPlayerItem(url: url)
+            playerItem = AVPlayerItem(url: url)
             player.replaceCurrentItem(with: playerItem)
             player.play()
+            self.currentChapterArray = self.fetchChapters(playerItem.asset.availableChapterLocales)
+            if currentChapterArray.isEmpty {
+                tableView.isHidden = true
+            } else {
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                    self.tableView.isHidden = false
+                }
+            }
         }
     }
+    
+    func fetchChapters(_ chapterLocales: [Locale]) -> [Chapter] {
+        var chapterIndex = 1
+        let chapterLocale = playerItem.asset.availableChapterLocales
+        var chapters = [Chapter]()
+        for locale in chapterLocale {
+            let chapterMetaData = playerItem.asset.chapterMetadataGroups(withTitleLocale: locale, containingItemsWithCommonKeys: [AVMetadataKey.commonKeyArtwork])
+            for chapterData in chapterMetaData {
+                let chapter = Chapter(title: AVMetadataItem.metadataItems(from: chapterData.items, withKey: AVMetadataKey.commonKeyTitle, keySpace: AVMetadataKeySpace.common).first?.value?.copy(with: nil) as? String ?? "Chapter", start: Int(CMTimeGetSeconds(chapterData.timeRange.start)), duration: Int(CMTimeGetSeconds(chapterData.timeRange.duration)), index: chapterIndex)
+                chapters.append(chapter)
+                chapterIndex += 1
+            }
+        }
+        return chapters
+    }
+
     
     fileprivate func playEpisodeUsingFileUrl() {
         guard let fileURL = URL(string: episode.fileUrl ?? "") else { return }
@@ -88,11 +115,11 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
     }
     
     var panGesture: UIPanGestureRecognizer!
-    
+    var tapGesture: UITapGestureRecognizer!
     
     
     fileprivate func setupGestures() {
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapMaximize)))
+        miniPlayerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapMaximize)))
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         miniPlayerView.addGestureRecognizer(panGesture)
         let scrollViewPanGesture = UIPanGestureRecognizer(target: self, action: #selector(handleDismissalPan))
@@ -116,7 +143,7 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
             let translation = gesture.translation(in: superview)
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 self.maximizedStackView.transform = .identity
-                if translation.y > 150 {
+                if translation.y > 150 && self.scrollView.contentOffset.y <= 0 {
                     let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
                     mainTabBarController?.minimizePlayerDetails()
                 }
@@ -124,6 +151,7 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
         }
     }
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var tableView: UITableView!
     
     fileprivate func setupAudioSession() {
         do {
@@ -236,6 +264,7 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
         observeBoundaryTime()
         volumeSlider.setValue(AVAudioSession.sharedInstance().outputVolume, animated: true)
         setupVolumeView()
+        setupTableView()
     }
     
     fileprivate func setupVolumeView() {
@@ -243,6 +272,15 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
         volumeView.alpha = 0.001
         maximizedStackView.addSubview(volumeView)
     }
+    
+    fileprivate func setupTableView() {
+     tableView.delegate = self
+     tableView.dataSource = self
+     tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
+     tableView.backgroundColor = .red
+
+    }
+    
     
     fileprivate func setupInterruptionObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption), name: .AVAudioSessionInterruption, object: nil)
@@ -358,6 +396,7 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var maximizedStackView: UIStackView!
     @IBOutlet weak var miniPlayerView: UIView!
+    @IBOutlet weak var mainTableView: UIView!
     
     @IBAction func handleCurrentTimeSliderChange(_ sender: UISlider) {
         let percentage = currentTimeSlider.value
@@ -480,6 +519,27 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate {
         }
     }
     
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return currentChapterArray.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "cellId")
+//        let startTime = currentChapterArray[indexPath.row].start
+//        cell.textLabel?.text = "\(startTime)"
+        cell.textLabel?.text = currentChapterArray[indexPath.row].title
+//        cell.detailTextLabel?.text = "\(startTime)"
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(indexPath.row)
+        let delta = Int64(currentChapterArray[indexPath.row].start)
+        let fifteenSeconds = CMTimeMake(delta, 1)
+        player.seek(to: fifteenSeconds)
+    }
+
     
 
 }
