@@ -277,8 +277,6 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate, UITableViewDelegat
      tableView.delegate = self
      tableView.dataSource = self
      tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
-     tableView.backgroundColor = .red
-
     }
     
     
@@ -525,9 +523,10 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate, UITableViewDelegat
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "cellId")
-//        let startTime = currentChapterArray[indexPath.row].start
-//        cell.textLabel?.text = "\(startTime)"
+        let cell = UITableViewCell(style: .value1, reuseIdentifier: "cellId")
+        let delta = Int64(currentChapterArray[indexPath.row].start)
+        let time = CMTimeMake(delta, 1)
+        cell.detailTextLabel?.text = time.toDisplayString()
         cell.textLabel?.text = currentChapterArray[indexPath.row].title
 //        cell.detailTextLabel?.text = "\(startTime)"
         return cell
