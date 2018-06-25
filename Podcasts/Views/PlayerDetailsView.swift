@@ -59,6 +59,8 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate, UITableViewDelegat
             playerItem = AVPlayerItem(url: url)
             player.replaceCurrentItem(with: playerItem)
             player.play()
+            self.playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            self.miniPlayPausebutton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             self.currentChapterArray = self.fetchChapters(playerItem.asset.availableChapterLocales)
             if currentChapterArray.isEmpty {
                 tableView.isHidden = true
