@@ -265,6 +265,7 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate, UITableViewDelegat
         volumeSlider.setValue(AVAudioSession.sharedInstance().outputVolume, animated: true)
         setupVolumeView()
         setupTableView()
+        handlePlayPause()
     }
     
     fileprivate func setupVolumeView() {
@@ -404,6 +405,15 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate, UITableViewDelegat
         let seekTime = CMTimeMakeWithSeconds(seekTimeInSeconds, Int32(NSEC_PER_SEC))
         MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = seekTimeInSeconds
         player.seek(to: seekTime)
+        if player.timeControlStatus == .paused {
+            player.play()
+            playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            miniPlayPausebutton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+        } else {
+            player.pause()
+            playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            miniPlayPausebutton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+        }
     }
     
     @IBAction func handleRewind(_ sender: UIButton) {
@@ -538,8 +548,6 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate, UITableViewDelegat
         let fifteenSeconds = CMTimeMake(delta, 1)
         player.seek(to: fifteenSeconds)
     }
-
-    
 
 }
 
