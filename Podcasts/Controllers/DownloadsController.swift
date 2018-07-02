@@ -9,6 +9,7 @@
 import UIKit
 
 class DownloadsController: UITableViewController {
+    
     fileprivate let cellId = "cellId"
     var episodes = UserDefaults.standard.downloadedEpisodes()
     

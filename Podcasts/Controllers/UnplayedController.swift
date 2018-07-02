@@ -8,16 +8,17 @@
 
 import UIKit
 
-class UnplayedController: UITableViewController {
+class UnplayedController: VCWithPlayer {
     
     let podcasts = UserDefaults.standard.savedPodcasts()
     var episodes = [Episode]()
     let cellId = "cellId"
-    
+    let tableView = UITableView()
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         setupTableView()
+     
         let feedURLs = podcasts.compactMap { $0.feedUrl }
         print(feedURLs)
         for url in feedURLs {
@@ -29,7 +30,7 @@ class UnplayedController: UITableViewController {
                 }
             }
         }
-}
+    }
     
     
     fileprivate func setupNavigationBar() {
@@ -46,7 +47,7 @@ class UnplayedController: UITableViewController {
         tableView.estimatedRowHeight = 450
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! EpisodeCell
         let episode = episodes[indexPath.row]
         cell.episode = episode
@@ -54,11 +55,11 @@ class UnplayedController: UITableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return episodes.count
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let episode = self.episodes[indexPath.row]
         let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
         mainTabBarController?.maximizePlayerDetails(episode: episode, playlistEpisodes: self.episodes)
