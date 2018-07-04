@@ -14,8 +14,9 @@ class VCWithPlayer: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
-        view.addSubview(PlayerService.sharedIntance.playerView!)
-      
+        let window = UIApplication.shared.keyWindow!
+        window.addSubview(PlayerService.sharedIntance.playerView!)
+        
         
  
     }

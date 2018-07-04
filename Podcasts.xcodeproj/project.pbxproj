@@ -47,6 +47,9 @@
 		9A4E58AA20E6923F006D8132 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4E58A920E6923E006D8132 /* MainNavigationController.swift */; };
 		9A9BAD3620EA5022002FBC53 /* FavouriteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A9BAD3520EA5022002FBC53 /* FavouriteCell.xib */; };
 		9A9BAD3820EA5251002FBC53 /* FavouriteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A9BAD3720EA5251002FBC53 /* FavouriteCell.swift */; };
+		9A9BAD3A20EA6F38002FBC53 /* NewEpisodeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A9BAD3920EA6F38002FBC53 /* NewEpisodeCell.xib */; };
+		9A9BAD3C20EA6F59002FBC53 /* NewEpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A9BAD3B20EA6F59002FBC53 /* NewEpisodeCell.swift */; };
+		9A9BAD3E20EBC931002FBC53 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A9BAD3D20EBC931002FBC53 /* TestViewController.swift */; };
 		9AF50C7720E5313E0025E2B9 /* PlayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF50C7620E5313E0025E2B9 /* PlayerService.swift */; };
 		9AF50C7920E535610025E2B9 /* VCWithPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF50C7820E535610025E2B9 /* VCWithPlayer.swift */; };
 		9AF50C7B20E537A00025E2B9 /* PlayerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9AF50C7A20E537A00025E2B9 /* PlayerView.xib */; };
@@ -97,6 +100,9 @@
 		9A4E58A920E6923E006D8132 /* MainNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
 		9A9BAD3520EA5022002FBC53 /* FavouriteCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FavouriteCell.xib; sourceTree = "<group>"; };
 		9A9BAD3720EA5251002FBC53 /* FavouriteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteCell.swift; sourceTree = "<group>"; };
+		9A9BAD3920EA6F38002FBC53 /* NewEpisodeCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewEpisodeCell.xib; sourceTree = "<group>"; };
+		9A9BAD3B20EA6F59002FBC53 /* NewEpisodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEpisodeCell.swift; sourceTree = "<group>"; };
+		9A9BAD3D20EBC931002FBC53 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		9AF50C7620E5313E0025E2B9 /* PlayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerService.swift; sourceTree = "<group>"; };
 		9AF50C7820E535610025E2B9 /* VCWithPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCWithPlayer.swift; sourceTree = "<group>"; };
 		9AF50C7A20E537A00025E2B9 /* PlayerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayerView.xib; sourceTree = "<group>"; };
@@ -166,6 +172,7 @@
 				2C9A60EA205B123F00D2C909 /* FavoritesController.swift */,
 				2CABE24420C830AD00178877 /* DownloadsController.swift */,
 				2CB5D51820C95BE100EA2EA7 /* HomeController.swift */,
+				9A9BAD3D20EBC931002FBC53 /* TestViewController.swift */,
 				2CDDDD7720CAD40B0080CCF3 /* StoreController.swift */,
 				2CDDDD7F20CD54A10080CCF3 /* FeaturedController.swift */,
 				2CDDDD8120CD573A0080CCF3 /* CategoriesController.swift */,
@@ -221,6 +228,8 @@
 				2CA5942520D2C8A1002FAF8E /* InProgressCell.swift */,
 				9A9BAD3520EA5022002FBC53 /* FavouriteCell.xib */,
 				9A9BAD3720EA5251002FBC53 /* FavouriteCell.swift */,
+				9A9BAD3920EA6F38002FBC53 /* NewEpisodeCell.xib */,
+				9A9BAD3B20EA6F59002FBC53 /* NewEpisodeCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -313,6 +322,7 @@
 				9A9BAD3620EA5022002FBC53 /* FavouriteCell.xib in Resources */,
 				2CDDDD7C20CC5F300080CCF3 /* PlayerDetailsView.xib in Resources */,
 				2C8DAF53203A05C3000CE7EA /* LaunchScreen.storyboard in Resources */,
+				9A9BAD3A20EA6F38002FBC53 /* NewEpisodeCell.xib in Resources */,
 				2C8DAF50203A05C3000CE7EA /* Assets.xcassets in Resources */,
 				2C8EC8D52046FF04001D0C7F /* EpisodeCell.xib in Resources */,
 				2CE0AE13203D792900D21838 /* PodcastCell.xib in Resources */,
@@ -417,8 +427,10 @@
 				2C9A60EF205E943700D2C909 /* UserDefaults.swift in Sources */,
 				2C8EC8D12046FE60001D0C7F /* Episode.swift in Sources */,
 				2C9A60ED205B15BE00D2C909 /* FavoritePodcastCell.swift in Sources */,
+				9A9BAD3C20EA6F59002FBC53 /* NewEpisodeCell.swift in Sources */,
 				2CDDDD8020CD54A20080CCF3 /* FeaturedController.swift in Sources */,
 				2CE0AE11203D725600D21838 /* PodcastCell.swift in Sources */,
+				9A9BAD3E20EBC931002FBC53 /* TestViewController.swift in Sources */,
 				2CA5942620D2C8A1002FAF8E /* InProgressCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
