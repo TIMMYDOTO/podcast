@@ -1,14 +1,12 @@
 //
 //  FavouriteCell.swift
-//  Podcasts
+//  
 //
-//  Created by Artyom Schiopu on 7/2/18.
-//  Copyright © 2018 2018 BZG Inc. All rights reserved.
+//  Created by Artyom Schiopu on 7/5/18.
 //
 
 import UIKit
 
 class FavouriteCell: UICollectionViewCell {
-    
-    @IBOutlet var favouriteThumbNail: UIImageView!
+    var favouriteThumbNail: UIImageView!
 }
