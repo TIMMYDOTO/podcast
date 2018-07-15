@@ -1,28 +1,22 @@
 //
-//  NewEpisodeCell.swift
+//  Episodes.swift
 //  Podcasts
 //
-//  Created by Artyom Schiopu on 7/2/18.
+//  Created by Artyom Schiopu on 7/11/18.
 //  Copyright © 2018 2018 BZG Inc. All rights reserved.
 //
 
 import UIKit
 
-class NewEpisodeCell: UITableViewCell {
-
-    @IBOutlet var thumbNail: UIImageView!
-    @IBOutlet var title: UILabel!
-    @IBOutlet var pubdate: UILabel!
-    @IBOutlet var author: UILabel!
-    @IBOutlet var playBtn: UIButton!
-    var stringURL = String()
+class EpisodCell: UITableViewCell {
+    @IBOutlet weak var title: UILabel!
     
+    @IBOutlet weak var duration: UILabel!
     
-    
-    
-    
-    
-    
+    @IBOutlet weak var date: UILabel!
+    var descriptionText: String!
+    var authorText: String!
+    var streamUrl: String!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

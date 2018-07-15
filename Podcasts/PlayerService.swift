@@ -7,10 +7,12 @@
 //
 
 import UIKit
-
+import AVKit
+import MediaPlayer
 class PlayerService {
     var playerView:PlayerView?
-
+    var playerItem: AVPlayerItem!
+    let player = AVPlayer()
     static let sharedIntance = PlayerService ()
     
      init(){
@@ -21,7 +23,15 @@ class PlayerService {
     }
 
     
-
+    func play(stringURL: String) {
+        if stringURL.isEmpty {
+            return
+        }
+        playerItem = AVPlayerItem(url: URL(string: stringURL )!)
+        player.replaceCurrentItem(with: playerItem)
+        player.play()
+        playerView?.pauseBtn.setImage(#imageLiteral(resourceName: "PauseWhite"), for: .normal)
+    }
     
    
     

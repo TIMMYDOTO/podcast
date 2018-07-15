@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -25,16 +25,23 @@
                     <rect key="frame" x="138" y="12" width="19" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" backgroundImage="Rewind"/>
+                    <connections>
+                        <action selector="handleRewind:" destination="iN0-l3-epB" eventType="touchUpInside" id="EZZ-vq-Qpn"/>
+                    </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JUr-Fe-7iG" userLabel="pause">
-                    <rect key="frame" x="197" y="12" width="20" height="23"/>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JUr-Fe-7iG" userLabel="pause">
+                    <rect key="frame" x="194" y="11" width="22" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" backgroundImage="PauseWhite"/>
+                    <color key="tintColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <state key="normal" image="play-1"/>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fxN-cN-pWo" userLabel="fastForward">
                     <rect key="frame" x="257" y="12" width="19" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" backgroundImage="Fast Forward"/>
+                    <connections>
+                        <action selector="handleFastForward:" destination="iN0-l3-epB" eventType="touchUpInside" id="jdI-uG-Qne"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2aJ-FY-9uN" userLabel="arrow">
                     <rect key="frame" x="331" y="17" width="21" height="12"/>
@@ -47,19 +54,17 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="arrowBtn" destination="2aJ-FY-9uN" id="tpZ-7m-PJL"/>
-                <outlet property="fastForwardBtn" destination="fxN-cN-pWo" id="CnB-g3-Sf3"/>
                 <outlet property="favouriteBtn" destination="5MD-6e-Zuk" id="fNE-hm-ABH"/>
                 <outlet property="pauseBtn" destination="JUr-Fe-7iG" id="r9Y-lN-uqb"/>
-                <outlet property="rewindBtn" destination="vMO-pQ-hwF" id="KtE-yh-McF"/>
             </connections>
-            <point key="canvasLocation" x="-5.5" y="193"/>
+            <point key="canvasLocation" x="-6" y="192.5"/>
         </view>
     </objects>
     <resources>
         <image name="Arrow" width="21" height="12"/>
         <image name="Fast Forward" width="19" height="21"/>
-        <image name="PauseWhite" width="20" height="23"/>
         <image name="Rewind" width="19" height="21"/>
         <image name="favour" width="49" height="47"/>
+        <image name="play-1" width="22" height="25"/>
     </resources>
 </document>

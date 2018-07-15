@@ -8,5 +8,10 @@
 import UIKit
 
 class FavouriteCell: UICollectionViewCell {
-    var favouriteThumbNail: UIImageView!
+    
+    @IBOutlet weak var shadowView: UIView!
+    @IBOutlet var favouriteThumbNail: UIImageView!
+    var stringURL: String!
+    
+
 }

@@ -1,28 +1,23 @@
 //
-//  NewEpisodeCell.swift
+//  FinishListening.swift
 //  Podcasts
 //
-//  Created by Artyom Schiopu on 7/2/18.
+//  Created by Artyom Schiopu on 7/9/18.
 //  Copyright © 2018 2018 BZG Inc. All rights reserved.
 //
 
 import UIKit
 
-class NewEpisodeCell: UITableViewCell {
+class FinishListening: UITableViewCell {
 
+    
+    @IBOutlet var definition: UILabel!
+    @IBOutlet var remainingTime: UILabel!
     @IBOutlet var thumbNail: UIImageView!
-    @IBOutlet var title: UILabel!
-    @IBOutlet var pubdate: UILabel!
-    @IBOutlet var author: UILabel!
+    @IBOutlet var titleLabel: UILabel!
     @IBOutlet var playBtn: UIButton!
+    
     var stringURL = String()
-    
-    
-    
-    
-    
-    
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
