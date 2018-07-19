@@ -11,7 +11,9 @@ import UIKit
 class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
     
     let formatter = DateFormatter()
-
+    var clickedPodcast = Podcast()
+    
+    @IBOutlet var thumbnail: UIImageView!
     
     @IBOutlet weak var episodesTableView: UITableView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -20,30 +22,51 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var authorLabel: UILabel!
     var episodes = [Episode]()
     var currentEpisodes = [Episode]()
-    let podcasts = UserDefaults.standard.savedPodcasts()
+    var podcasts = UserDefaults.standard.savedPodcasts()
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+    
         formatter.dateFormat = "MMM d"
         let feedURLs = podcasts.compactMap { $0.feedUrl }
         print(feedURLs)
-        for url in feedURLs {
-            APIService.shared.fetchEpisodes(feedUrl: url) { (episode, _) in
-                self.episodes.append(contentsOf: episode)
+
+        for  podcast in podcasts{
+            APIService.shared.fetchEpisodes(feedUrl: podcast.feedUrl!) { ( episode, _) in
+               
+                var myEpisode = episode
+                for (index, _) in myEpisode.enumerated(){
+                    myEpisode[index].podcast = podcast
+                }
+                self.episodes.append(contentsOf: myEpisode)
+
                 self.episodes.sort { $0.pubDate > $1.pubDate }
                 self.currentEpisodes = self.episodes
                 DispatchQueue.main.async {
-                    self.episodesTableView.reloadData()
+                self.episodesTableView.reloadData()
                 }
             }
+            
         }
-       
 
     }
     
 
     @IBAction func handleAddToLibrary(_ sender: UIButton) {
-        
+        var podcasts = UserDefaults.standard.savedPodcasts()
+        var podcastInArray = false
+        for (_, podcast) in podcasts.enumerated() {
+            if clickedPodcast.artistName == podcast.artistName{
+               podcastInArray = true
+                
+            }
+            
+        }
+        if podcastInArray == false {
+               podcasts.append(clickedPodcast)
+            let data = NSKeyedArchiver.archivedData(withRootObject: podcasts)
+            UserDefaults.standard.set(data, forKey: UserDefaults.favoritedPodcastKey)
+         
+        }
     }
     
     @IBAction func handleOption(_ sender: UIButton) {
@@ -74,17 +97,29 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
         cell.streamUrl = self.currentEpisodes[indexPath.row].streamUrl
        
         cell.duration.text = getHoursMinutes(time: episodes[indexPath.row].duration ?? 0)
-
-        
+        cell.thumbnailURLString = self.currentEpisodes[indexPath.row].podcast?.artworkUrl600
+        cell.showTitle = self.currentEpisodes[indexPath.row].podcast?.artistName
+        cell.podcast = self.currentEpisodes[indexPath.row].podcast
         return cell
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! EpisodCell
         descriptionLabel.text = cell.descriptionText
         authorLabel.text = cell.authorText
-        titleLabel.text = cell.title.text
-         PlayerService.sharedIntance.play(stringURL: cell.streamUrl)
+         authorLabel.sizeToFit()
+        titleLabel.text = cell.showTitle
+        titleLabel.sizeToFit()
+        
+        clickedPodcast = cell.podcast!
+        
+       
+      
+        thumbnail.sd_setImage(with: URL(string: cell.thumbnailURLString ?? ""), completed: nil)
+        PlayerService.sharedIntance.play(stringURL: cell.streamUrl)
     }
+    
+    
     func getHoursMinutes(time: Double) -> String {
  
         let hours = Int(time/3600)

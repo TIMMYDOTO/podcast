@@ -12,11 +12,11 @@ import AVFoundation
 class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        UINavigationBar.appearance().prefersLargeTitles = true
-        tabBar.tintColor = .purple
+  
+     
 
      
-        setupViewControllers()
+        
         setupPlayerDetailsView()
     }
         
@@ -72,22 +72,5 @@ class MainTabBarController: UITabBarController {
         playerDetailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
     
-    func setupViewControllers() {
-        viewControllers = [
-            generateNavigationController(with: HomeController(), title: "Home", image: #imageLiteral(resourceName: "home1")),
-            generateNavigationController(with: StoreController(), title: "Store", image: #imageLiteral(resourceName: "search")),
-            generateNavigationController(with: DownloadsController(), title: "Downloads", image: #imageLiteral(resourceName: "downloads"))
-        ]
-    }
-    
-    //MARK:- Helper Functions
-    
-    fileprivate func generateNavigationController(with rootViewController: UIViewController, title: String, image: UIImage) -> UIViewController {
-        
-        let navController = UINavigationController(rootViewController: rootViewController)
-        rootViewController.navigationItem.title = title
-        navController.tabBarItem.title = title
-        navController.tabBarItem.image = image
-        return navController
-    }
+
 }

@@ -17,6 +17,9 @@ class EpisodCell: UITableViewCell {
     var descriptionText: String!
     var authorText: String!
     var streamUrl: String!
+    var thumbnailURLString: String?
+    var showTitle:String?
+    var podcast:Podcast?
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -28,4 +31,5 @@ class EpisodCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+    
 }

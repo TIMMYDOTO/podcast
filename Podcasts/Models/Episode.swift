@@ -11,6 +11,8 @@ import FeedKit
 
 
 struct Episode: Codable {
+ 
+    
     let title: String
     let pubDate: Date
     let description: String
@@ -20,7 +22,10 @@ struct Episode: Codable {
     let streamUrl: String
     let duration: Double?
     
+    var podcast:Podcast?
+  
     init(feedItem: RSSFeedItem) {
+  
         self.streamUrl = feedItem.enclosure?.attributes?.url ?? ""
         self.title = feedItem.title ?? ""
         self.pubDate = feedItem.pubDate ?? Date()
@@ -28,6 +33,10 @@ struct Episode: Codable {
         self.author = feedItem.iTunes?.iTunesAuthor ?? ""
         self.imageUrl = feedItem.iTunes?.iTunesImage?.attributes?.href
         self.duration = feedItem.iTunes?.iTunesDuration
+      
+       
     }
+
+    
 }
 

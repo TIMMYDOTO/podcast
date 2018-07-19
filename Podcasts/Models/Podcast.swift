@@ -9,7 +9,7 @@
 import Foundation
 
 
-class Podcast: NSObject, Decodable, NSCoding {
+class Podcast: NSObject, Decodable, NSCoding, Encodable {
     func encode(with aCoder: NSCoder) {
         print("Trying to transform Podcast into Data")
         aCoder.encode(trackName ?? "", forKey: "trackNameKey")
@@ -26,10 +26,13 @@ class Podcast: NSObject, Decodable, NSCoding {
         self.artworkUrl600 = aDecoder.decodeObject(forKey: "artworkKey") as? String
         self.feedUrl = aDecoder.decodeObject(forKey: "feedKey") as? String
     }
-    
+    override init() {
+        super.init()
+    }
     var trackName: String?
     var artistName: String?
     var artworkUrl600: String?
     var trackCount: Int?
     var feedUrl: String?
 }
+

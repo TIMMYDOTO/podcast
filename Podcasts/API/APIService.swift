@@ -58,7 +58,8 @@ class APIService {
                     return
                 }
                 guard let feed = result.rssFeed else { return }
-                let episodes = feed.toEpisodes()
+                var episodes = feed.toEpisodes()
+                
                 completionHandler(episodes, feed)
             })
         }

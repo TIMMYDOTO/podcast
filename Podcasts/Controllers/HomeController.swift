@@ -12,7 +12,7 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
    
     
     let collectinCellId = "collectinCellId"
-    @IBOutlet var mainTableView: UITableView!
+    @IBOutlet var mainTableView: MainTableView!
   
     
     @IBOutlet var newEpisodesTableView: UITableView!
@@ -35,11 +35,12 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
     let formatter = DateFormatter()
     
     var numberOfRows = NSMutableArray();
-
+   
     @IBOutlet var collectionView: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+   
+
         numberOfRows.add(podcasts)
         numberOfRows.add(episodes)
         numberOfRows.add(incompleteEpisodes)
@@ -63,6 +64,7 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+   
         podcasts = UserDefaults.standard.savedPodcasts()
         collectionView?.reloadData()
      
@@ -71,7 +73,18 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
         incompleteEpisodesTime = UserDefaults.standard.inProgressEpisodesTimes()
     
     }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let nav = self.navigationController?.navigationBar
+        nav?.isTranslucent = false
+        let img = UIImage()
+        
+        self.navigationController?.navigationBar.shadowImage = img
+        self.navigationController?.navigationBar.setBackgroundImage(img, for: UIBarMetrics.default)
+      
+    }
     func settingViews(){
+     
         mainTableView.separatorStyle = .none
         mainTableView.allowsSelection = false
         collectionView.frame = CGRect(x:0, y:0, width: UIScreen.main.bounds.width, height: 230)
@@ -89,16 +102,18 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35))
     
-        let headerLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 35))
+        let headerLabel = UILabel(frame: CGRect(x: 0, y: 6, width: 0, height: 35))
         headerLabel.font = UIFont.init(name: "Helvetica", size: 24)
   
-        let viewAllButton = UIButton(frame: CGRect(x:200, y:0, width: 150, height: 30))
+        let viewAllButton = UIButton(frame: CGRect(x:cell.frame.width - 100, y:8, width: 150, height: 30))
         viewAllButton.setTitle("View all...", for: .normal)
+        viewAllButton.titleLabel?.font =  UIFont(name: "Helvetica", size: 13)
         viewAllButton.addTarget(self, action: #selector(viewNewEpisodeScreen), for: .touchUpInside)
         viewAllButton.setTitleColor(UIColor(red: 32.0/255.0, green: 124.0/255.0, blue: 231.0/255.0, alpha: 1.0), for: .normal)
 
         if tableView == newEpisodesTableView{
-   
+            tableView.layoutMargins = UIEdgeInsets.zero
+            tableView.separatorInset = UIEdgeInsets.zero
             headerLabel.text = "New Episodes"
             headerLabel.sizeToFit()
             view.addSubview(headerLabel)
@@ -109,6 +124,8 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
         return view
     }
         if tableView == finishListeningTableView{
+            tableView.layoutMargins = UIEdgeInsets.zero
+            tableView.separatorInset = UIEdgeInsets.zero
             headerLabel.text = "Finish listening"
             headerLabel.sizeToFit()
             view.addSubview(headerLabel)
@@ -120,6 +137,7 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
 
         return nil
     }
+
     @objc func viewNewEpisodeScreen(){
         let newEpisodeController = storyboard?.instantiateViewController(withIdentifier: "newEpisodeController") as! NewEpisodesController
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
@@ -150,8 +168,21 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
         navigationController?.pushViewController(PodcastsSearchController(), animated: true)
     }
     @objc fileprivate func optionButtonPressed(){
+
        mainTableView.isEditing = !mainTableView.isEditing
-      
+        if mainTableView.isEditing {
+          
+            collectionView.transform = CGAffineTransform(scaleX: 0.7, y: 0.7);
+            newEpisodesTableView.transform = CGAffineTransform(scaleX: 0.7, y: 0.7);
+            finishListeningTableView.transform = CGAffineTransform(scaleX: 0.7, y: 0.7);
+    
+        }else{
+            collectionView.transform = CGAffineTransform(scaleX: 1, y: 1);
+            newEpisodesTableView.transform = CGAffineTransform(scaleX: 1, y: 1);
+            finishListeningTableView.transform = CGAffineTransform(scaleX: 1, y: 1);
+        }
+       
+        
     }
     
  
@@ -178,20 +209,35 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
         if tableView == newEpisodesTableView {
             if(self.episodes.count > 0){
             return 3
-            }
+            }else{
             return 0
+            }
         }
         if tableView == finishListeningTableView {
-            return 2
+            if(self.incompleteEpisodes.count > 0){
+                return 2
+            }else{
+                return 0
+            }
         }
+      
         return numberOfRows.count
     }
+    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         if tableView == newEpisodesTableView! {
             
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdNewEpisode, for: indexPath) as! NewEpisodeCell
+            if indexPath.row == 0{
+     
+                let separatorLine = UIImageView.init(frame: CGRect(x: 0, y: 0, width: cell.frame.width, height: 0.5))
+        
+                separatorLine.backgroundColor = tableView.separatorColor
+                cell.contentView.addSubview(separatorLine)
+            }
+            cell.layoutMargins = UIEdgeInsets.zero
             let url = URL(string: episodes[indexPath.row].imageUrl?.toSecureHTTPS() ?? "")
             cell.thumbNail.sd_setImage(with: url)
             cell.title.text = self.episodes[indexPath.row].title
@@ -206,7 +252,14 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
         }
         if tableView == finishListeningTableView! {
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdFinishListening, for: indexPath) as! FinishListening
-            
+            if indexPath.row == 0{
+               
+                let separatorLine = UIImageView.init(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 0.5))
+                
+                separatorLine.backgroundColor = tableView.separatorColor
+                cell.contentView.addSubview(separatorLine)
+            }
+            cell.layoutMargins = UIEdgeInsets.zero
             cell.titleLabel.text = incompleteEpisodes[indexPath.row].title
             cell.titleLabel.sizeToFit()
             cell.definition.text = incompleteEpisodes[indexPath.row].description
@@ -222,27 +275,42 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
         }
         let cell = MainCell()
         if indexPath.row == 0{
-            cell.contentView.addSubview(collectionView)
+            cell.addSubview(collectionView)
+    
             collectionView.dataSource = self
+            
         }else if(indexPath.row == 1){
-            cell.contentView.addSubview(newEpisodesTableView)
+            
+            cell.addSubview(newEpisodesTableView)
+          
             newEpisodesTableView.dataSource = self
         }else if(indexPath.row == 2){
-            cell.contentView.addSubview(finishListeningTableView)
+            cell.addSubview(finishListeningTableView)
+            
             finishListeningTableView.dataSource = self
         }
+    
         
         return cell
     }
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        PlayerService.sharedIntance.playerView?.arrowBtn.isHidden = false
         if tableView == newEpisodesTableView {
             let cell = tableView.cellForRow(at: indexPath) as! NewEpisodeCell
             if cell.playBtn.currentBackgroundImage == UIImage.init(named: "play-button-2"){
                 cell.playBtn.setBackgroundImage(UIImage(named: "Pause button"), for: .normal)
             }
-            PlayerService.sharedIntance.play(stringURL: cell.stringURL)
+////           PlayerService.sharedIntance.episode = episodes[indexPath.row]
+////            PlayerService.sharedIntance.episodes = episodes
+////            PlayerService.sharedIntance.play(stringURL: cell.stringURL)
+//
+//
+//
+//            mainTabBarController?.playerDetailsView.saveInProgress()
+//            mainTabBarController?.maximizePlayerDetails(episode: episodes[indexPath.row], playlistEpisodes: episodes)
+            
         }
         if tableView == finishListeningTableView {
             let cell = tableView.cellForRow(at: indexPath) as! FinishListening

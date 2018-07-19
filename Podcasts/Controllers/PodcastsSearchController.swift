@@ -54,10 +54,10 @@ class PodcastsSearchController: UITableViewController, UISearchBarDelegate {
     //MARK:- UITableView
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let episodesController = EpisodesController()
+        let newEpisodesController = NewEpisodesController()
         let podcast = self.podcasts[indexPath.row]
-        episodesController.podcast = podcast
-        navigationController?.pushViewController(episodesController, animated: true)
+        newEpisodesController.podcast = podcast
+        navigationController?.pushViewController(newEpisodesController, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
