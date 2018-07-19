@@ -350,9 +350,14 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! FavouriteCell
        
-        PlayerService.sharedIntance.play(stringURL: cell.stringURL)
+        let newEpisodeController = storyboard?.instantiateViewController(withIdentifier: "newEpisodeController") as! NewEpisodesController
+        let podcast = self.podcasts[indexPath.row]
+        newEpisodeController.podcast = podcast
+        self.navigationController?.isNavigationBarHidden = true
+        self.navigationController?.pushViewController(newEpisodeController, animated: true)
+        
+        
     }
     
 }

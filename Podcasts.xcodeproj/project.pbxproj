@@ -45,6 +45,7 @@
 		39495ACFFAC162CD580260F7 /* Pods_Podcasts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D0512A971A94BA2384BE108 /* Pods_Podcasts.framework */; };
 		9A29C43C20FD016800ECF96B /* PlayerDetailsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A29C43B20FD016800ECF96B /* PlayerDetailsView.xib */; };
 		9A29C44020FE154900ECF96B /* MainTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A29C43F20FE154900ECF96B /* MainTableView.swift */; };
+		9A2C54BA2100E8560026E820 /* ChapterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2C54B92100E8560026E820 /* ChapterController.swift */; };
 		9A2E2E1820EE2ACA006E8004 /* FavouriteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2E2E1720EE2AC9006E8004 /* FavouriteCell.swift */; };
 		9A3A425520F644B0008DB386 /* NewEpisodesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3A425420F644B0008DB386 /* NewEpisodesController.swift */; };
 		9A3A425720F6583F008DB386 /* EpisodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3A425620F6583F008DB386 /* EpisodCell.swift */; };
@@ -101,6 +102,7 @@
 		2D0512A971A94BA2384BE108 /* Pods_Podcasts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Podcasts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A29C43B20FD016800ECF96B /* PlayerDetailsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PlayerDetailsView.xib; path = "../../../../Podcast Design/podcasts/Podcasts/Views/PlayerDetailsView.xib"; sourceTree = "<group>"; };
 		9A29C43F20FE154900ECF96B /* MainTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableView.swift; sourceTree = "<group>"; };
+		9A2C54B92100E8560026E820 /* ChapterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChapterController.swift; sourceTree = "<group>"; };
 		9A2E2E1720EE2AC9006E8004 /* FavouriteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FavouriteCell.swift; path = "/Users/Artyom/Downloads/Podcast Design 2/podcasts/Podcasts/Views/FavouriteCell.swift"; sourceTree = "<absolute>"; };
 		9A3A425420F644B0008DB386 /* NewEpisodesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEpisodesController.swift; sourceTree = "<group>"; };
 		9A3A425620F6583F008DB386 /* EpisodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodCell.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 				2CDDDD8320CD5D4F0080CCF3 /* GenrePodcasts.swift */,
 				2CDDDD8520CE644D0080CCF3 /* UnplayedController.swift */,
 				2C29AB4020CFC0D4009C1598 /* InProgressController.swift */,
+				9A2C54B92100E8560026E820 /* ChapterController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -404,6 +407,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A2C54BA2100E8560026E820 /* ChapterController.swift in Sources */,
 				2C8EC8DA204708A3001D0C7F /* RSSFeed.swift in Sources */,
 				2CDDDD7820CAD40B0080CCF3 /* StoreController.swift in Sources */,
 				2C293327204D6F6E00870D05 /* PlayerDetailsView.swift in Sources */,

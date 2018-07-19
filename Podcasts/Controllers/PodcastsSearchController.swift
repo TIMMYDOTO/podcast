@@ -54,10 +54,14 @@ class PodcastsSearchController: UITableViewController, UISearchBarDelegate {
     //MARK:- UITableView
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let newEpisodesController = NewEpisodesController()
+       let storyboard = UIStoryboard(name: "Main", bundle: nil)
+   let newEpisodeController = storyboard.instantiateViewController(withIdentifier: "newEpisodeController") as! NewEpisodesController
+      
+    
         let podcast = self.podcasts[indexPath.row]
-        newEpisodesController.podcast = podcast
-        navigationController?.pushViewController(newEpisodesController, animated: true)
+        newEpisodeController.podcast = podcast
+       newEpisodeController.navigationController?.isNavigationBarHidden = true
+        navigationController?.pushViewController(newEpisodeController, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

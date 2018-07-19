@@ -133,6 +133,10 @@ class EpisodesController: UITableViewController {
         let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
         mainTabBarController?.playerDetailsView.saveInProgress()
         mainTabBarController?.maximizePlayerDetails(episode: episode, playlistEpisodes: self.episodes)
+        
+      
+        
+        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

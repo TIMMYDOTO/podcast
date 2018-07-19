@@ -14,11 +14,11 @@ class EpisodCell: UITableViewCell {
     @IBOutlet weak var duration: UILabel!
     
     @IBOutlet weak var date: UILabel!
-    var descriptionText: String!
-    var authorText: String!
+
     var streamUrl: String!
-    var thumbnailURLString: String?
-    var showTitle:String?
+
+    @IBOutlet var playButton: UIButton!
+    
     var podcast:Podcast?
     override func awakeFromNib() {
         super.awakeFromNib()
