@@ -59,23 +59,7 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
         let feedURLs = podcasts.compactMap { $0.feedUrl }
         print(feedURLs)
 
-//        for  podcast in podcasts{
-//            APIService.shared.fetchEpisodes(feedUrl: podcast.feedUrl!) { ( episode, _) in
-//
-//                var myEpisode = episode
-//                for (index, _) in myEpisode.enumerated(){
-//                    myEpisode[index].podcast = podcast
-//                }
-//                self.episodes.append(contentsOf: myEpisode)
-//
-//                self.episodes.sort { $0.pubDate > $1.pubDate }
-//                self.currentEpisodes = self.episodes
-//                DispatchQueue.main.async {
-//                self.episodesTableView.reloadData()
-//                }
-//            }
-//
-//        }
+        
 
     }
     
@@ -127,44 +111,30 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
    
         cell.title.text = self.currentEpisodes[indexPath.row].title
         cell.date.text = formatter.string(from: self.currentEpisodes[indexPath.row].pubDate)
-//        cell.authorText = self.currentEpisodes[indexPath.row].author
-//        cell.descriptionText = self.currentEpisodes[indexPath.row].description
         cell.streamUrl = self.currentEpisodes[indexPath.row].streamUrl
-       
-        cell.duration.text = getHoursMinutes(time: episodes[indexPath.row].duration ?? 0)
-      
-//        cell.showTitle = self.currentEpisodes[indexPath.row].podcast?.artistName
+        cell.duration.text = NewEpisodesController.getHoursMinutes(time: episodes[indexPath.row].duration ?? 0)
         cell.podcast = self.currentEpisodes[indexPath.row].podcast
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! EpisodCell
-   
-        
-//        clickedPodcast = cell.podcast!
+
         
        
-      
-
-        PlayerService.sharedIntance.play(stringURL: cell.streamUrl)
+      let chapterController = storyboard?.instantiateViewController(withIdentifier: "ChapterController") as! ChapterController
+        chapterController.podcastName = titleLabel.text
+        chapterController.episode = episodes[indexPath.row]
+        self.navigationController?.isNavigationBarHidden = true
+        self.navigationController?.pushViewController(chapterController, animated: true)
+//        PlayerService.sharedIntance.play(stringURL: cell.streamUrl)
     }
     
     
-    func getHoursMinutes(time: Double) -> String {
- 
-        let hours = Int(time/3600)
-        let minutes = Int(time/60)
-        
-        var finalString = ""
-        if hours > 0 {
-             finalString =  "| " + String(hours) + "hr "
-        }
-       
-        if minutes > 0 {
-        finalString  = finalString + String(minutes) + "m"
-        }
-        return finalString
+ class func getHoursMinutes(time: Double) -> String {
+    
+    let hours = Int(time / 3600)
+    let minutes = Int(time / 60) % 60
+    return "\(hours)hr \(minutes)m"
     }
 
 

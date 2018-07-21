@@ -101,7 +101,7 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35))
-    
+
         let headerLabel = UILabel(frame: CGRect(x: 0, y: 6, width: 0, height: 35))
         headerLabel.font = UIFont.init(name: "Helvetica", size: 24)
   
@@ -139,10 +139,10 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
     }
 
     @objc func viewNewEpisodeScreen(){
-        let newEpisodeController = storyboard?.instantiateViewController(withIdentifier: "newEpisodeController") as! NewEpisodesController
+        let viewAllController = storyboard?.instantiateViewController(withIdentifier: "viewAllController") as! ViewAllController
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.navigationController?.isNavigationBarHidden = true
-        self.navigationController?.pushViewController(newEpisodeController, animated: true)
+        self.navigationController?.pushViewController(viewAllController, animated: true)
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if tableView == newEpisodesTableView {
@@ -302,14 +302,7 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
             if cell.playBtn.currentBackgroundImage == UIImage.init(named: "play-button-2"){
                 cell.playBtn.setBackgroundImage(UIImage(named: "Pause button"), for: .normal)
             }
-////           PlayerService.sharedIntance.episode = episodes[indexPath.row]
-////            PlayerService.sharedIntance.episodes = episodes
-////            PlayerService.sharedIntance.play(stringURL: cell.stringURL)
-//
-//
-//
-//            mainTabBarController?.playerDetailsView.saveInProgress()
-//            mainTabBarController?.maximizePlayerDetails(episode: episodes[indexPath.row], playlistEpisodes: episodes)
+
             
         }
         if tableView == finishListeningTableView {
