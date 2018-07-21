@@ -40,7 +40,15 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
     override func viewDidLoad() {
         super.viewDidLoad()
    
-
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+       
+        navigationController?.navigationBar.backIndicatorImage = #imageLiteral(resourceName: "Arrow-1")
+        navigationController?.navigationBar.backIndicatorTransitionMaskImage = #imageLiteral(resourceName: "Arrow-1")
+       
+       
+        
         numberOfRows.add(podcasts)
         numberOfRows.add(episodes)
         numberOfRows.add(incompleteEpisodes)
@@ -64,7 +72,9 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-   
+       navigationController?.navigationBar.tintColor = .black
+    self.navigationController?.navigationBar.isTranslucent = false
+        
         podcasts = UserDefaults.standard.savedPodcasts()
         collectionView?.reloadData()
      
@@ -73,16 +83,7 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
         incompleteEpisodesTime = UserDefaults.standard.inProgressEpisodesTimes()
     
     }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        let nav = self.navigationController?.navigationBar
-        nav?.isTranslucent = false
-        let img = UIImage()
-        
-        self.navigationController?.navigationBar.shadowImage = img
-        self.navigationController?.navigationBar.setBackgroundImage(img, for: UIBarMetrics.default)
-      
-    }
+
     func settingViews(){
      
         mainTableView.separatorStyle = .none
@@ -108,7 +109,7 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
         let viewAllButton = UIButton(frame: CGRect(x:cell.frame.width - 100, y:8, width: 150, height: 30))
         viewAllButton.setTitle("View all...", for: .normal)
         viewAllButton.titleLabel?.font =  UIFont(name: "Helvetica", size: 13)
-        viewAllButton.addTarget(self, action: #selector(viewNewEpisodeScreen), for: .touchUpInside)
+        viewAllButton.addTarget(self, action: #selector(viewAllController), for: .touchUpInside)
         viewAllButton.setTitleColor(UIColor(red: 32.0/255.0, green: 124.0/255.0, blue: 231.0/255.0, alpha: 1.0), for: .normal)
 
         if tableView == newEpisodesTableView{
@@ -138,10 +139,9 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
         return nil
     }
 
-    @objc func viewNewEpisodeScreen(){
+    @objc func viewAllController(){
         let viewAllController = storyboard?.instantiateViewController(withIdentifier: "viewAllController") as! ViewAllController
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        self.navigationController?.isNavigationBarHidden = true
+     
         self.navigationController?.pushViewController(viewAllController, animated: true)
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -347,7 +347,7 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
         let newEpisodeController = storyboard?.instantiateViewController(withIdentifier: "newEpisodeController") as! NewEpisodesController
         let podcast = self.podcasts[indexPath.row]
         newEpisodeController.podcast = podcast
-        self.navigationController?.isNavigationBarHidden = true
+
         self.navigationController?.pushViewController(newEpisodeController, animated: true)
         
         

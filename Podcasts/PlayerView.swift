@@ -13,6 +13,7 @@ var playerDetailsView = PlayerDetailsView()
     var uiview :UIView?
     @IBOutlet var favouriteBtn: UIButton!
     
+    @IBOutlet var coverView: UIView!
     @IBOutlet var pauseBtn: UIButton!{
        
         didSet {
@@ -40,6 +41,7 @@ var playerDetailsView = PlayerDetailsView()
         
     }
     @objc func handlePlayPause(){
+      
         if PlayerService.sharedIntance.player.timeControlStatus == .paused {
             PlayerService.sharedIntance.player.play()
             pauseBtn.setImage(#imageLiteral(resourceName: "PauseWhite"), for: .normal)

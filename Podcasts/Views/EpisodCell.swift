@@ -13,7 +13,7 @@ class EpisodCell: UITableViewCell {
     
     @IBOutlet weak var duration: UILabel!
     
-    @IBOutlet weak var date: UILabel!
+    @IBOutlet weak var dateAndDuration: UILabel!
 
     var streamUrl: String!
 

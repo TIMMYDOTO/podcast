@@ -26,6 +26,7 @@ class PlayerService {
 
     
     func play(stringURL: String) {
+        self.playerView?.coverView.isHidden = true
         if stringURL.isEmpty {
             return
         }

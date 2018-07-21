@@ -41,6 +41,7 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
             self.currentEpisodes = self.episodes
             DispatchQueue.main.async {
                 self.episodesTableView.reloadData()
+                feed.description =  feed.description?.replacingOccurrences(of: "\n", with: "")
                 self.descriptionLabel.text = feed.description
                 self.authorLabel.text = self.podcast?.artistName
                 self.authorLabel.sizeToFit()
@@ -54,7 +55,7 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
  
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.navigationController?.navigationBar.isTranslucent = true
         formatter.dateFormat = "MMM d"
         let feedURLs = podcasts.compactMap { $0.feedUrl }
         print(feedURLs)
@@ -63,11 +64,10 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
 
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-         self.navigationController?.isNavigationBarHidden = true
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.tintColor = .white
 
-     
     }
  
     @IBAction func handleAddToLibrary(_ sender: UIButton) {
@@ -91,45 +91,53 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
     @IBAction func handleOption(_ sender: UIButton) {
        
     }
-    @IBAction func backButton(_ sender: UIButton) {
-        let homeController = storyboard?.instantiateViewController(withIdentifier: "HomeController") as! HomeController
-        self.navigationController?.isNavigationBarHidden = false
-        
-        self.navigationController?.pushViewController(homeController, animated: true)
-    }
-    
-    
-   
-    
+
+ 
     //MARK: - TableView
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 45
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.currentEpisodes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EpisodCell", for: indexPath) as! EpisodCell
-   
+        if indexPath.row == 0 {
+            let separatorLine = UIImageView.init(frame: CGRect(x: 19, y: 0, width: cell.frame.width-38, height: 0.5))
+            
+            separatorLine.backgroundColor = tableView.separatorColor
+            cell.contentView.addSubview(separatorLine)
+        }
         cell.title.text = self.currentEpisodes[indexPath.row].title
-        cell.date.text = formatter.string(from: self.currentEpisodes[indexPath.row].pubDate)
+        cell.dateAndDuration.text = String(format: "%@ | %@", formatter.string(from: self.currentEpisodes[indexPath.row].pubDate), NewEpisodesController.getHoursMinutes(time: episodes[indexPath.row].duration ?? 0))
+        cell.dateAndDuration.sizeToFit()
         cell.streamUrl = self.currentEpisodes[indexPath.row].streamUrl
-        cell.duration.text = NewEpisodesController.getHoursMinutes(time: episodes[indexPath.row].duration ?? 0)
+     
         cell.podcast = self.currentEpisodes[indexPath.row].podcast
+        cell.playButton.tag = indexPath.row
+        cell.playButton.addTarget(self, action: #selector(playButtonClicked), for: .touchUpInside)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        
-       
       let chapterController = storyboard?.instantiateViewController(withIdentifier: "ChapterController") as! ChapterController
         chapterController.podcastName = titleLabel.text
         chapterController.episode = episodes[indexPath.row]
-        self.navigationController?.isNavigationBarHidden = true
+     chapterController.shouldPlay = false
         self.navigationController?.pushViewController(chapterController, animated: true)
 //        PlayerService.sharedIntance.play(stringURL: cell.streamUrl)
     }
     
-    
+    @objc func playButtonClicked(sender: UIButton){
+        print("playButtonClicked", sender.tag)
+        let chapterController = storyboard?.instantiateViewController(withIdentifier: "ChapterController") as! ChapterController
+        chapterController.podcastName = titleLabel.text
+        chapterController.episode = episodes[sender.tag]
+        chapterController.shouldPlay = true
+        self.navigationController?.pushViewController(chapterController, animated: true)
+    }
  class func getHoursMinutes(time: Double) -> String {
     
     let hours = Int(time / 3600)

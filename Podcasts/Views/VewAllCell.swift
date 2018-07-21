@@ -12,6 +12,7 @@ class VewAllCell: UITableViewCell {
 
     @IBOutlet weak var episodeImageView: UIImageView!
     
+    @IBOutlet var shadowView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
     
@@ -21,12 +22,12 @@ class VewAllCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        print("awakeFromNib")
+  
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-print("setSelected")
+
         // Configure the view for the selected state
     }
 

@@ -13,7 +13,6 @@ class ChapterController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
     
     @IBOutlet weak var shadowView: UIView!
     @IBOutlet weak var artWorkImage: UIImageView!
-    @IBOutlet weak internal var podcastNameLabel: UILabel!
     @IBOutlet weak internal var episodeNameLabel: UILabel!
     @IBOutlet weak internal var infoLabel: UILabel!
     @IBOutlet weak internal var descriptionLabel: UILabel!
@@ -21,18 +20,28 @@ class ChapterController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
     var podcastName: String!
     var episode: Episode!
     var currentChapterArray = [Chapter]()
-    
+    var shouldPlay:Bool!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        
        fillInDesign()
     }
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.tintColor = .black
+        self.navigationController?.navigationBar.isTranslucent = true
+    }
     func fillInDesign(){
-        
+        navigationController?.navigationBar.topItem?.title = "";
         
         artWorkImage.sd_setImage(with: URL(string: episode.imageUrl!))
-        podcastNameLabel.text = podcastName
+        let rightItem = UIBarButtonItem(title: podcastName, style: .plain, target: self, action: nil)
+        rightItem.tintColor = UIColor(red: 17.0/255.0, green: 116.0/255.0, blue: 232.0/255.0, alpha: 1)
+
+        rightItem.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "SFProDisplay-Semibold", size: 18)!], for: .normal)
+        navigationItem.rightBarButtonItem = rightItem
+//        podcastNameLabel.text = podcastName
         episodeNameLabel.text = episode.title
   
         shadowView.layer.shadowColor = UIColor.black.cgColor
@@ -56,6 +65,9 @@ class ChapterController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
         descriptionLabel.text = episode.description
         PlayerService.sharedIntance.play(stringURL: episode.streamUrl)
         currentChapterArray = fetchChapters(PlayerService.sharedIntance.playerItem.asset.availableChapterLocales)
+        if !shouldPlay{
+            PlayerService.sharedIntance.playerView?.handlePlayPause()
+        }
     }
     
     
