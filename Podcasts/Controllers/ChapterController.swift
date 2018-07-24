@@ -63,7 +63,7 @@ class ChapterController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
         
         
         descriptionLabel.text = episode.description
-        PlayerService.sharedIntance.play(stringURL: episode.streamUrl)
+        PlayerService.sharedIntance.play(episode: episode)
         currentChapterArray = fetchChapters(PlayerService.sharedIntance.playerItem.asset.availableChapterLocales)
         if !shouldPlay{
             PlayerService.sharedIntance.playerView?.handlePlayPause()
@@ -147,7 +147,7 @@ class ChapterController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
     }
     
     @IBAction func handlePlayEpisode(_ sender: UIButton) {
-        PlayerService.sharedIntance.play(stringURL: episode.streamUrl)
+        PlayerService.sharedIntance.play(episode: episode)
     }
     
     @IBAction func handleOption(_ sender: UIButton) {

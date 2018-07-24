@@ -25,17 +25,18 @@ class PlayerService {
     }
 
     
-    func play(stringURL: String) {
+    func play(episode: Episode) {
         self.playerView?.coverView.isHidden = true
-        if stringURL.isEmpty {
+        if episode.streamUrl.isEmpty {
             return
         }
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-            playerItem = AVPlayerItem(url: URL(string: stringURL )!)
+            playerItem = AVPlayerItem(url: URL(string: episode.streamUrl )!)
             player.replaceCurrentItem(with: playerItem)
             player.play()
             playerView?.pauseBtn.setImage(#imageLiteral(resourceName: "PauseWhite"), for: .normal)
+            playerView?.favouriteBtn.sd_setImage(with: URL(string: episode.imageUrl!), for: .normal )
         } catch {
             print(error)
         }

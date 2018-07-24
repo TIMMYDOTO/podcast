@@ -60,10 +60,19 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
         let feedURLs = podcasts.compactMap { $0.feedUrl }
         print(feedURLs)
 
-        
+      
 
     }
-    
+    fileprivate func isFavorite() -> Bool{
+        let savedPodcasts = UserDefaults.standard.savedPodcasts()
+        let hasFavorited = savedPodcasts.index(where: { $0.trackName == self.podcast?.trackName && $0.artistName == self.podcast?.artistName }) != nil
+        if hasFavorited {
+            
+            return true
+        } else {
+            return false
+        }
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.tintColor = .white
@@ -71,21 +80,16 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
     }
  
     @IBAction func handleAddToLibrary(_ sender: UIButton) {
-        var podcasts = UserDefaults.standard.savedPodcasts()
-        var podcastInArray = false
-        for (_, podcast) in podcasts.enumerated() {
-            if clickedPodcast.artistName == podcast.artistName{
-               podcastInArray = true
-                
-            }
-            
-        }
-        if podcastInArray == false {
-               podcasts.append(clickedPodcast)
-            let data = NSKeyedArchiver.archivedData(withRootObject: podcasts)
-            UserDefaults.standard.set(data, forKey: UserDefaults.favoritedPodcastKey)
+        if   !isFavorite() {
          
-        }
+       
+        guard let podcast = self.podcast else { return }
+        var listOfPodcasts = UserDefaults.standard.savedPodcasts()
+        listOfPodcasts.append(podcast)
+        let data = NSKeyedArchiver.archivedData(withRootObject: listOfPodcasts)
+        UserDefaults.standard.set(data, forKey: UserDefaults.favoritedPodcastKey)
+  }
+
     }
     
     @IBAction func handleOption(_ sender: UIButton) {

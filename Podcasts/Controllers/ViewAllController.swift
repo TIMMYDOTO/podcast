@@ -48,7 +48,11 @@ class ViewAllController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
         }
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        let chapterController = storyboard?.instantiateViewController(withIdentifier: "ChapterController") as! ChapterController
+//        chapterController.podcastName = titleLabel.text
+        chapterController.episode = episodes[indexPath.row]
+        chapterController.shouldPlay = false
+        self.navigationController?.pushViewController(chapterController, animated: true)
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return episodes.count
