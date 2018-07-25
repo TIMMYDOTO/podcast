@@ -2,7 +2,7 @@
 //  TableViewWithName.swift
 //  Alamofire
 //
-//  Created by Artyom Schiopu on 7/24/18.
+//  Created by Boris Esanu on 7/24/18.
 //
 
 import UIKit

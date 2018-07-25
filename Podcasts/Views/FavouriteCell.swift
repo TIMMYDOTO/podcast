@@ -2,7 +2,7 @@
 //  FavouriteCell.swift
 //  
 //
-//  Created by Artyom Schiopu on 7/5/18.
+//  Created by Boris Esanu on 7/5/18.
 //
 
 import UIKit

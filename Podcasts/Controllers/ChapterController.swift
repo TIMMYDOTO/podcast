@@ -2,7 +2,7 @@
 //  ChapterController.swift
 //  Podcasts
 //
-//  Created by Artyom Schiopu on 7/19/18.
+//  Created by Boris Esanu on 7/19/18.
 //  Copyright © 2018 2018 BZG Inc. All rights reserved.
 //
 

@@ -2,7 +2,7 @@
 //  FinishListening.swift
 //  Podcasts
 //
-//  Created by Artyom Schiopu on 7/9/18.
+//  Created by Boris Esanuu on 7/9/18.
 //  Copyright © 2018 2018 BZG Inc. All rights reserved.
 //
 
