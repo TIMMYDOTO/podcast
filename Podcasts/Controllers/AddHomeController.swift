@@ -46,10 +46,11 @@ class AddHomeController: UIViewController, UITableViewDataSource, UITableViewDel
         }
         
          formatter.dateFormat = "MMM d, yyyy"
-         deletedTables = UserDefaults.standard.object(forKey: "deletedTables") as! [String]
+        let deletedTables: [String]?  = UserDefaults.standard.object(forKey: "deletedTables") as? [String]
         
         var yPosition:CGFloat = 0.0
-        for table in deletedTables {
+        if deletedTables != nil {
+            for table in deletedTables! {
             
             if table == "collectionView"{
                 favoritesCollectionView.frame = CGRect(x:37,y: yPosition, width: view.frame.width-61, height: 230)
@@ -91,8 +92,8 @@ class AddHomeController: UIViewController, UITableViewDataSource, UITableViewDel
             }
         }
         
-       
     }
+}
     
     //#MARK: - Collection View
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
