@@ -14,6 +14,8 @@ class DownloadCell: UITableViewCell {
     @IBOutlet var pubdateLabel: UILabel!
     @IBOutlet var authorLabel: UILabel!
     @IBOutlet var playBtn: UIButton!
+    @IBOutlet var shadowView: UIView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

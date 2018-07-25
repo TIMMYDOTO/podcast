@@ -17,6 +17,7 @@ class FinishListening: UITableViewCell {
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var playBtn: UIButton!
     
+    @IBOutlet var shadowView: UIView!
     var stringURL = String()
     override func awakeFromNib() {
         super.awakeFromNib()
