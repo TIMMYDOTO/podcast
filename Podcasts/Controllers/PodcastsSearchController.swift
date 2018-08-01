@@ -10,16 +10,21 @@ import UIKit
 import Alamofire
 
 class PodcastsSearchController: UITableViewController, UISearchBarDelegate {
-    
+    let controllers = ["Top Charts", "Categories"]
     var podcasts = [Podcast]()
-    
+    let vcs = [FeaturedController(), CategoriesController()]
     let cellId = "cellId"
-    
+    let controllerCellId = "controllerCellId"
     let searchController = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()
- 
+        let rightItem = UIBarButtonItem(title: "Discover", style: .plain, target: self, action: nil)
+        rightItem.tintColor = UIColor(red: 17.0/255.0, green: 116.0/255.0, blue: 232.0/255.0, alpha: 1)
+        
+        rightItem.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "SFProDisplay-Semibold", size: 18)!], for: .normal)
+        navigationItem.rightBarButtonItem = rightItem
+       navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         setupSearchBar()
         setupTableView()
     }
@@ -30,7 +35,11 @@ class PodcastsSearchController: UITableViewController, UISearchBarDelegate {
         tableView.register(nib, forCellReuseIdentifier: cellId)
     }
     
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.tintColor = .black
+        
+    }
     //MARK:- Setup Work
     
     fileprivate func setupSearchBar() {
@@ -54,6 +63,12 @@ class PodcastsSearchController: UITableViewController, UISearchBarDelegate {
     //MARK:- UITableView
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if podcasts.count == 0 {
+            navigationController?.pushViewController(vcs[indexPath.row], animated: true)
+        }
+            
+        else{
        let storyboard = UIStoryboard(name: "Main", bundle: nil)
    let newEpisodeController = storyboard.instantiateViewController(withIdentifier: "newEpisodeController") as! NewEpisodesController
       
@@ -62,33 +77,40 @@ class PodcastsSearchController: UITableViewController, UISearchBarDelegate {
         newEpisodeController.podcast = podcast
        newEpisodeController.navigationController?.isNavigationBarHidden = true
         navigationController?.pushViewController(newEpisodeController, animated: true)
+        }
     }
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-        label.text = "Please enter a Search Term"
-        return label
-    }
+
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return self.podcasts.count > 0 ? 0 : 250
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if podcasts.count == 0 {
+          return controllers.count
+        }
         return podcasts.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! PodcastCell
-        
+      
+        if podcasts.count == 0 {
+            let cell = UITableViewCell(style: .default, reuseIdentifier: controllerCellId)
+             cell.textLabel?.text = controllers[indexPath.row]
+            return cell
+        }
+       
+          let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! PodcastCell
         let podcast = self.podcasts[indexPath.row]
         cell.podcast = podcast
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+         if podcasts.count == 0 {
+            return 44
+        }
         return 132
     }
     

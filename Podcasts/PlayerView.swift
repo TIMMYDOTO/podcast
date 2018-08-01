@@ -9,13 +9,13 @@
 import UIKit
 import CoreMedia
 class PlayerView: UIView {
-var playerDetailsView = PlayerDetailsView()
-    var uiview :UIView?
+
+ 
     @IBOutlet var favouriteBtn: UIButton!
-    
+   
     @IBOutlet var coverView: UIView!
     @IBOutlet var pauseBtn: UIButton!{
-       
+
         didSet {
         
             pauseBtn.addTarget(self, action: #selector(handlePlayPause), for: .touchUpInside)
@@ -29,27 +29,31 @@ var playerDetailsView = PlayerDetailsView()
         }
     }
     @objc func openFullPlayer(){
-
-        
-        self.uiview = Bundle.main.loadNibNamed("PlayerDetailsView", owner: self, options: nil)![0] as? PlayerDetailsView
-        
-        let window = UIApplication.shared.delegate?.window!
-        
-        window?.addSubview(self.uiview!)
-        let maximize =  MainTabBarController()
-            maximize.maximizePlayerDetails(episode: PlayerService.sharedIntance.episode, playlistEpisodes: PlayerService.sharedIntance.episodes)
-        
+           PlayerService.sharedIntance.playerDetailsView.episode = PlayerService.sharedIntance.episode
+ PlayerService.sharedIntance.playerDetailsView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+      PlayerService.sharedIntance.playerDetailsView.frame = CGRect(x: 0, y: UIScreen.main.bounds.height+20, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseIn, animations:{ PlayerService.sharedIntance.playerDetailsView.frame = CGRect(x:0, y:0, width:UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)}) { (hasFinished) in
+            
+        }
+        self.superview?.addSubview(PlayerService.sharedIntance.playerDetailsView)
+        self.superview?.bringSubview(toFront: PlayerService.sharedIntance.playerDetailsView)
+       
     }
-    @objc func handlePlayPause(){
+    @objc func handlePlayPause(notSave: Bool){
       
         if PlayerService.sharedIntance.player.timeControlStatus == .paused {
             PlayerService.sharedIntance.player.play()
+
             pauseBtn.setImage(#imageLiteral(resourceName: "PauseWhite"), for: .normal)
+            PlayerService.sharedIntance.playerDetailsView.playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
            
         } else {
+            if !notSave{
+            PlayerService.sharedIntance.saveInProgress()
+            }
             PlayerService.sharedIntance.player.pause()
             pauseBtn.setImage(#imageLiteral(resourceName: "play-1"), for: .normal)
-          
+            PlayerService.sharedIntance.playerDetailsView.playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
           
         }
     }
@@ -68,3 +72,4 @@ var playerDetailsView = PlayerDetailsView()
         PlayerService.sharedIntance.player.seek(to: seekTime)
     }
 }
+

@@ -14,6 +14,7 @@ class FeaturedController: UITableViewController {
     let cellId = "cellId"
     var podcasts = [Podcast]()
     override func viewDidLoad() {
+        self.view.transform = CGAffineTransform(scaleX: Constants.scale, y: Constants.scale)
         super.viewDidLoad()
         setupTableView()
         fetchFeaturedPodcasts()
@@ -30,7 +31,11 @@ class FeaturedController: UITableViewController {
     func setupNavigationBar() {
         navigationItem.title = "Featured Podcast"
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.tintColor = .black
+        
+    }
     //MARK:- UITableView
     
     fileprivate func setupTableView() {
@@ -67,9 +72,14 @@ class FeaturedController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let episodesController = EpisodesController()
+
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let newEpisodeController = storyboard.instantiateViewController(withIdentifier: "newEpisodeController") as! NewEpisodesController
+        
         let podcast = self.podcasts[indexPath.row]
-        episodesController.podcast = podcast
-        navigationController?.pushViewController(episodesController, animated: true)
+        newEpisodeController.podcast = podcast
+      
+        navigationController?.pushViewController(newEpisodeController, animated: true)
     }
 }

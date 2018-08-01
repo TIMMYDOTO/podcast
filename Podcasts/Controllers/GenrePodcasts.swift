@@ -22,7 +22,11 @@ class GenrePodcasts: UITableViewController {
         fetchFeaturedPodcasts()
         setupNavigationBar()
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.tintColor = .black
+        
+    }
     func fetchFeaturedPodcasts() {
         APIService.shared.fetchPodcastsByGenre(genreId: genreIndex!) { (podcasts) in
             self.podcasts = podcasts
@@ -70,9 +74,12 @@ class GenrePodcasts: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let episodesController = EpisodesController()
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let newEpisodeController = storyboard.instantiateViewController(withIdentifier: "newEpisodeController") as! NewEpisodesController
+        
         let podcast = self.podcasts[indexPath.row]
-        episodesController.podcast = podcast
-        navigationController?.pushViewController(episodesController, animated: true)
+        newEpisodeController.podcast = podcast
+        
+        navigationController?.pushViewController(newEpisodeController, animated: true)
     }
 }

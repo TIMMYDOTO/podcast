@@ -27,6 +27,7 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
     var podcast: Podcast? {
         didSet {
             fetchEpisodes()
+           
         }
     }
     
@@ -44,9 +45,9 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
                 feed.description =  feed.description?.replacingOccurrences(of: "\n", with: "")
                 self.descriptionLabel.text = feed.description
                 self.authorLabel.text = self.podcast?.artistName
-                self.authorLabel.sizeToFit()
+ 
                 self.titleLabel.text = feed.title
-                self.titleLabel.sizeToFit()
+         
                 self.thumbnail.sd_setImage(with: URL(string: self.podcast?.artworkUrl600 ?? ""), completed: nil)
             }
         }
@@ -55,6 +56,10 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
  
     override func viewDidLoad() {
         super.viewDidLoad()
+      
+        
+        navigationController?.navigationBar.topItem?.title = "";
+    
         self.navigationController?.navigationBar.isTranslucent = true
         formatter.dateFormat = "MMM d"
         let feedURLs = podcasts.compactMap { $0.feedUrl }
@@ -84,6 +89,7 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
          
        
         guard let podcast = self.podcast else { return }
+            
         var listOfPodcasts = UserDefaults.standard.savedPodcasts()
         listOfPodcasts.append(podcast)
         let data = NSKeyedArchiver.archivedData(withRootObject: listOfPodcasts)

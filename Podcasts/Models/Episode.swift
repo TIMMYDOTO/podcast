@@ -21,7 +21,7 @@ struct Episode: Codable {
     let author: String
     let streamUrl: String
     let duration: Double?
-    
+
     var podcast:Podcast?
   
     init(feedItem: RSSFeedItem) {

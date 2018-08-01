@@ -57,7 +57,7 @@ class MainTabBarController: UITabBarController {
     var bottomAnchorConstraint: NSLayoutConstraint!
     
     fileprivate func  setupPlayerDetailsView() {
-        print("Setting up PlayerDetailsView")
+  
         playerDetailsView.translatesAutoresizingMaskIntoConstraints = false
         view.insertSubview(playerDetailsView, belowSubview: tabBar)
         maximizedTopAnchorConstraint =         playerDetailsView.topAnchor.constraint(equalTo: view.topAnchor, constant: view.frame.height)

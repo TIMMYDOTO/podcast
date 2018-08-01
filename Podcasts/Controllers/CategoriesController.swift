@@ -19,12 +19,26 @@ class CategoriesController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
+ 
+//        self.view.transform = CGAffineTransform(scaleX: Constants.scale, y: Constants.scale)
+   
     }
     
-
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+ 
+        let myView = UIView(frame: CGRect(x:0, y:0, width: UIScreen.main.bounds.width, height: 44))
+        self.tableView.tableFooterView = myView
+    }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.tintColor = .black
+        
+    }
     fileprivate func setupNavigationBar() {
         navigationItem.title = "Categories"
+  
     }
     
     @objc fileprivate func searchButtonPressed() {

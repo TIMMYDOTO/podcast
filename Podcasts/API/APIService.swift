@@ -23,7 +23,10 @@ class APIService {
     
         let downloadRequest = DownloadRequest.suggestedDownloadDestination()
         Alamofire.download(episode.streamUrl, to: downloadRequest).downloadProgress { (progress) in
-            print(progress.fractionCompleted)
+            print("progress fractionCompleted", progress.fractionCompleted)
+            if progress.fractionCompleted == 1.0{
+                UserDefaults.standard.downloadEpisode(episode: episode)
+            }
             NotificationCenter.default.post(name: .downloadProgress, object: nil, userInfo: ["title": episode.title, "progress" : progress.fractionCompleted])
             }.response { (response) in
                 print(response.destinationURL?.absoluteString ?? "")

@@ -59,8 +59,6 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate, UITableViewDelegat
             playerItem = AVPlayerItem(url: url)
             player.replaceCurrentItem(with: playerItem)
             player.play()
-            self.playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
-            self.miniPlayPausebutton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             self.currentChapterArray = self.fetchChapters(playerItem.asset.availableChapterLocales)
             if currentChapterArray.isEmpty {
                 tableView.isHidden = true
@@ -267,7 +265,6 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate, UITableViewDelegat
         volumeSlider.setValue(AVAudioSession.sharedInstance().outputVolume, animated: true)
         setupVolumeView()
         setupTableView()
-        handlePlayPause()
     }
     
     fileprivate func setupVolumeView() {
@@ -407,15 +404,6 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate, UITableViewDelegat
         let seekTime = CMTimeMakeWithSeconds(seekTimeInSeconds, Int32(NSEC_PER_SEC))
         MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = seekTimeInSeconds
         player.seek(to: seekTime)
-        if player.timeControlStatus == .paused {
-            player.play()
-            playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
-            miniPlayPausebutton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
-        } else {
-            player.pause()
-            playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
-            miniPlayPausebutton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
-        }
     }
     
     @IBAction func handleRewind(_ sender: UIButton) {
@@ -433,7 +421,7 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate, UITableViewDelegat
     }
     
     @IBAction func handleVolumeChanged(_ sender: UISlider) {
-        MPVolumeView.setVolume(sender.value)
+        MPVolumeView.setVolumee(sender.value)
         
     }
     
@@ -551,10 +539,12 @@ class PlayerDetailsView: UIView, UIGestureRecognizerDelegate, UITableViewDelegat
         player.seek(to: fifteenSeconds)
     }
 
+    
+
 }
 
 extension MPVolumeView {
-    static func setVolume(_ volume: Float) {
+    static func setVolumee(_ volume: Float) {
         let volumeView = MPVolumeView()
         volumeView.isHidden = true
         volumeView.alpha = 0.01

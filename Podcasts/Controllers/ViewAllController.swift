@@ -9,43 +9,72 @@
 import UIKit
 
 class ViewAllController: VCWithPlayer, UITableViewDataSource, UITableViewDelegate {
+    var nameOfTable : String!
     
     let podcasts = UserDefaults.standard.savedPodcasts()
     var episodes = [Episode]()
-     let formatter = DateFormatter()
+    var formatter = DateFormatter()
     @IBOutlet var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        formatter.dateFormat = "MMM d, yyyy"
-        let rightItem = UIBarButtonItem(title: "New Episodes", style: .plain, target: self, action: nil)
-        rightItem.tintColor = UIColor(red: 17.0/255.0, green: 116.0/255.0, blue: 232.0/255.0, alpha: 1)
-        
-        rightItem.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "SFProDisplay-Semibold", size: 18)!], for: .normal)
-        navigationItem.rightBarButtonItem = rightItem
+        var title = ""
+   formatter.dateFormat = "MMM d, yyyy"
         
         let feedURLs =  podcasts.compactMap { $0.feedUrl }
         
         print(feedURLs)
-        for url in feedURLs {
-            APIService.shared.fetchEpisodes(feedUrl: url) { (episode, _) in
-                
-                self.episodes.append(contentsOf: episode)
-                self.episodes.sort { $0.pubDate > $1.pubDate }
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
+        var i = 0
+        if nameOfTable == "newEpisodesTableView" {
+            for url in feedURLs {
+         
+                APIService.shared.fetchEpisodes(feedUrl: url) { (episode, _) in
+                  
+                    self.episodes.append(contentsOf: episode)
+                    self.episodes.sort { $0.pubDate > $1.pubDate }
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
                 }
             }
+                title = "New Episode"
         }
+         if nameOfTable == "finishListeningTableView" {
+            
+           episodes = UserDefaults.standard.inProgressEpisodes()
+            title = "Finish Listening"
+        }
+         if nameOfTable == "downloadTableView" {
+           episodes = UserDefaults.standard.downloadedEpisodes()
+            title = "Downloads"
+        }
+        let rightItem = UIBarButtonItem(title: title, style: .plain, target: self, action: nil)
+        rightItem.tintColor = UIColor(red: 17.0/255.0, green: 116.0/255.0, blue: 232.0/255.0, alpha: 1)
+        
+        rightItem.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "SFProDisplay-Semibold", size: 18)!], for: .normal)
+        navigationItem.rightBarButtonItem = rightItem
     }
 
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+         
+//            if nameOfTable == "newEpisodesTableView"{
+//
+////            UserDefaults.standard.deleteEpisode(episode: episodes[indexPath.row])
+//            }
+//            if nameOfTable == "finishListeningTableView"{
+////                UserDefaults.standard.deleteEpisodeInProgress(episode: episodes[indexPath.row])
+//
+//
+//            }
+            if nameOfTable == "downloadTableView"{
+                UserDefaults.standard.deleteDownloadedEpisode(episode: episodes[indexPath.row])
+         
+            }
             episodes.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
-            UserDefaults.standard.deleteEpisodeInProgress(episode: episodes[indexPath.row])
-//            UserDefaults.standard.deleteInProgressTime(time: time, indexPath: indexPath.row)
         }
+
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let chapterController = storyboard?.instantiateViewController(withIdentifier: "ChapterController") as! ChapterController

@@ -50,9 +50,17 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>SFProDisplay-Medium.otf</string>
+		<string>SFProDisplay-Regular.otf</string>
+		<string>SFProDisplay-Light.otf</string>
+		<string>SFProDisplay-Semibold.otf</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
+		<string>fetch</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
@@ -65,11 +73,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-	</array>
-	<key>UIAppFonts</key>
-	<array>
-		<string>SF-Pro-Display-Semibold.otf</string>
-		<string>SF-Pro-Display-Black.otf</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>

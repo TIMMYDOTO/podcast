@@ -11,19 +11,21 @@ import AVKit
 import MediaPlayer
 class ChapterController: VCWithPlayer, UITableViewDataSource, UITableViewDelegate {
     
+    @IBOutlet var downloadButton: UIButton!
     @IBOutlet weak var shadowView: UIView!
     @IBOutlet weak var artWorkImage: UIImageView!
     @IBOutlet weak internal var episodeNameLabel: UILabel!
     @IBOutlet weak internal var infoLabel: UILabel!
     @IBOutlet weak internal var descriptionLabel: UILabel!
     @IBOutlet weak internal var tableView: UITableView!
+   
     var podcastName: String!
     var episode: Episode!
     var currentChapterArray = [Chapter]()
     var shouldPlay:Bool!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+     
         
        fillInDesign()
     }
@@ -31,11 +33,16 @@ class ChapterController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
         super.viewWillAppear(animated)
         navigationController?.navigationBar.tintColor = .black
         self.navigationController?.navigationBar.isTranslucent = true
+     
+    }
+     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+                 PlayerService.sharedIntance.showActivity(show: false)
     }
     func fillInDesign(){
         navigationController?.navigationBar.topItem?.title = "";
         
-        artWorkImage.sd_setImage(with: URL(string: episode.imageUrl!))
+      
         let rightItem = UIBarButtonItem(title: podcastName, style: .plain, target: self, action: nil)
         rightItem.tintColor = UIColor(red: 17.0/255.0, green: 116.0/255.0, blue: 232.0/255.0, alpha: 1)
 
@@ -63,10 +70,16 @@ class ChapterController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
         
         
         descriptionLabel.text = episode.description
-        PlayerService.sharedIntance.play(episode: episode)
+        if !shouldPlay {
+            PlayerService.sharedIntance.play(episode: episode, shouldSave: false)
+        }
+        else{
+            PlayerService.sharedIntance.play(episode: episode, shouldSave: true)
+        }
         currentChapterArray = fetchChapters(PlayerService.sharedIntance.playerItem.asset.availableChapterLocales)
         if !shouldPlay{
-            PlayerService.sharedIntance.playerView?.handlePlayPause()
+            PlayerService.sharedIntance.playerView?.handlePlayPause(notSave: true)
+            artWorkImage.sd_setImage(with: URL(string: episode.imageUrl!))
         }
     }
     
@@ -137,17 +150,31 @@ class ChapterController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
+        mainTabBarController?.playerDetailsView.saveInProgress()
         let delta = Int64(currentChapterArray[indexPath.row].start)
         let fifteenSeconds = CMTimeMake(delta, 1)
         PlayerService.sharedIntance.player.seek(to: fifteenSeconds)
     }
     @IBAction func handleDownload(_ sender: UIButton) {
-        UserDefaults.standard.downloadEpisode(episode: episode)
-        APIService.shared.downloadEpisode(episode: episode)
+
+        downloadButton.isEnabled = false
+        let savedEpisodes =  UserDefaults.standard.downloadedEpisodes()
+        if savedEpisodes.contains(where: { $0.title == episode.title }){
+            print("contains")
+        } else {
+            
+            APIService.shared.downloadEpisode(episode: episode)
+            
+        }
+        
+    
+       
     }
     
     @IBAction func handlePlayEpisode(_ sender: UIButton) {
-        PlayerService.sharedIntance.play(episode: episode)
+
+        PlayerService.sharedIntance.play(episode: episode, shouldSave: true)
     }
     
     @IBAction func handleOption(_ sender: UIButton) {
