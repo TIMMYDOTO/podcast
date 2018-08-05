@@ -11,5 +11,6 @@ import UIKit
 class UIButtonWitName: UIButton {
 
     var nameForButton = String()
-
+    var episode:Episode?
+    var vc = TableViewWithName()
 }

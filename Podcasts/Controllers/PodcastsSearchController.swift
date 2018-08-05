@@ -19,14 +19,22 @@ class PodcastsSearchController: UITableViewController, UISearchBarDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let rightItem = UIBarButtonItem(title: "Discover", style: .plain, target: self, action: nil)
-        rightItem.tintColor = UIColor(red: 17.0/255.0, green: 116.0/255.0, blue: 232.0/255.0, alpha: 1)
+        let rightItem = UIBarButtonItem(title: "", style: .done, target: self, action: #selector(backButton))
+        rightItem.image = #imageLiteral(resourceName: "ArrowRightSide")
+        self.navigationItem.rightBarButtonItem = rightItem
         
-        rightItem.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "SFProDisplay-Semibold", size: 18)!], for: .normal)
-        navigationItem.rightBarButtonItem = rightItem
+        let leftItem = UIBarButtonItem(title: "Discover", style: .plain, target: self, action: nil)
+        leftItem.tintColor = UIColor(red: 17.0/255.0, green: 116.0/255.0, blue: 232.0/255.0, alpha: 1)
+        
+        leftItem.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "SFProDisplay-Semibold", size: 18)!], for: .normal)
+        navigationItem.leftBarButtonItem = leftItem
        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         setupSearchBar()
         setupTableView()
+    }
+    
+    @objc func backButton(){
+        navigationController?.popViewController(animated: true)
     }
     
     fileprivate func setupTableView() {

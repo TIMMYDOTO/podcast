@@ -9,7 +9,7 @@
 import UIKit
 import FeedKit
 class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
-    
+    var incompleteEpisodes = UserDefaults.standard.inProgressEpisodes()
     let formatter = DateFormatter()
     var clickedPodcast = Podcast()
     
@@ -89,11 +89,37 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
          
        
         guard let podcast = self.podcast else { return }
+
+            
+            APIService.shared.fetchEpisodes(feedUrl: podcast.feedUrl!) { (episodes, rss) in
+                for episode in episodes{
+                    if self.incompleteEpisodes.contains(where: { $0.title == episode.title}){
+                        
+                    }else{
+                        
+                        self.episodes.append(episode)
+//                        self.episodes.sort { $0.pubDate > $1.pubDate }
+                     
+                    }
+                }
+                
+                for episode in episodes{
+                    UserDefaults.standard.newEpisode(episode: episode)
+                    
+                    
+                }
+                
+            }
+
+            
+            
+            
             
         var listOfPodcasts = UserDefaults.standard.savedPodcasts()
         listOfPodcasts.append(podcast)
         let data = NSKeyedArchiver.archivedData(withRootObject: listOfPodcasts)
         UserDefaults.standard.set(data, forKey: UserDefaults.favoritedPodcastKey)
+            
   }
 
     }

@@ -12,10 +12,13 @@ class PlayerView: UIView {
 
  
     @IBOutlet var favouriteBtn: UIButton!
-   
+    var sender:UIButtonWitName?
+    var previousSender = UIButtonWitName()
     @IBOutlet var coverView: UIView!
+    var homeVC:VCWithPlayer!
+    
     @IBOutlet var pauseBtn: UIButton!{
-
+        
         didSet {
         
             pauseBtn.addTarget(self, action: #selector(handlePlayPause), for: .touchUpInside)
@@ -39,11 +42,15 @@ class PlayerView: UIView {
         self.superview?.bringSubview(toFront: PlayerService.sharedIntance.playerDetailsView)
        
     }
-    @objc func handlePlayPause(notSave: Bool){
-      
+    @objc func handlePlayPause(notSave: Bool, sender : UIButtonWitName?){
+
         if PlayerService.sharedIntance.player.timeControlStatus == .paused {
             PlayerService.sharedIntance.player.play()
-
+            if self.sender != nil{
+                previousSender.setBackgroundImage(#imageLiteral(resourceName: "Pause button"), for: .normal)
+                previousSender = sender!
+                self.sender?.setBackgroundImage(#imageLiteral(resourceName: "Pause button"), for: .normal)
+            }
             pauseBtn.setImage(#imageLiteral(resourceName: "PauseWhite"), for: .normal)
             PlayerService.sharedIntance.playerDetailsView.playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
            
@@ -51,10 +58,14 @@ class PlayerView: UIView {
             if !notSave{
             PlayerService.sharedIntance.saveInProgress()
             }
+            if self.sender != nil{
+                self.sender?.setBackgroundImage(#imageLiteral(resourceName: "play-button-2"), for: .normal)
+            }
+    
             PlayerService.sharedIntance.player.pause()
             pauseBtn.setImage(#imageLiteral(resourceName: "play-1"), for: .normal)
             PlayerService.sharedIntance.playerDetailsView.playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
-          
+          homeVC.viewWillAppear(false)
         }
     }
     

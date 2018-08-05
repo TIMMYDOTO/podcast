@@ -19,6 +19,8 @@ class PlayerService {
 
     var episode: Episode?
     var episodes = [Episode]()
+    
+    var sender:UIButtonWitName?
     let player: AVPlayer = {
         let avPlayer = AVPlayer()
         avPlayer.automaticallyWaitsToMinimizeStalling = false
@@ -32,7 +34,7 @@ class PlayerService {
     }
 
     
-    func play(episode: Episode,  shouldSave: Bool) {
+    func play(episode: Episode,  shouldSave: Bool, sender: UIButtonWitName?) {
         self.playerView?.coverView.isHidden = true
       PlayerService.sharedIntance.playerDetailsView.observePlayerCurrentTime()
         if episode.streamUrl.isEmpty {
@@ -53,6 +55,9 @@ class PlayerService {
             player.replaceCurrentItem(with: playerItem)
             player.play()
             playerView?.pauseBtn.setImage(#imageLiteral(resourceName: "PauseWhite"), for: .normal)
+            sender?.setBackgroundImage(#imageLiteral(resourceName: "Pause button"), for: .normal)
+            playerView?.sender = sender
+           
             playerView?.favouriteBtn.sd_setImage(with: URL(string: episode.imageUrl!), for: .normal )
         } catch {
             print(error)
@@ -83,10 +88,11 @@ class PlayerService {
             return .success
         }
     }
+    
+    
     func saveInProgress() {
      var inProgressEpisode =  UserDefaults.standard.inProgressEpisodes()
 
-        
         let currentTime = player.currentTime().seconds
         guard let currentEpisode = episode else { return }
        
@@ -100,8 +106,6 @@ class PlayerService {
             
             
         UserDefaults.standard.inProgressEpisodeTime(time: currentTime)
-        
-//        }
     }
 //    func showActivity(show: Bool){
 //        let win:UIWindow = ((UIApplication.shared.delegate?.window)!)!

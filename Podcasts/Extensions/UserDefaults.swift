@@ -15,7 +15,7 @@ extension UserDefaults {
     static let downloadEpisodesKey = "downloadEpisodesKey"
     static let inProgressEpisodeKey = "inProgressEpisodeKey"
     static let inProgressEpisodeTimeKey = "inProgressEpisodeTimeKey"
-    
+    static let episodesKey = "EpisodesKey"
     
     
     
@@ -32,28 +32,40 @@ extension UserDefaults {
 
     }
     
-//    func inProgressEpisodeTime(time: Double) {
-//        do {
-//            var currentTime = inProgressEpisodesTimes()
-//            currentTime.insert(time, at: 0)
-//            let data = try JSONEncoder().encode(currentTime)
-//            UserDefaults.standard.set(data, forKey: UserDefaults.inProgressEpisodeTimeKey)
-//        } catch let encodeErr {
-//            print("Failed to encode episode:", encodeErr)
-//        }
-//    }
-//
-//    func inProgressEpisodesTimes() -> [Double] {
-//        guard let inProgressEpisodeTime = data(forKey: UserDefaults.inProgressEpisodeTimeKey) else { return [] }
-//        do {
-//            let episodesTime = try JSONDecoder().decode([Double].self, from: inProgressEpisodeTime)
-//            return episodesTime
-//        } catch let decodeErr{
-//            print("Failed to decode:", decodeErr)
-//        }
-//        return []
-//    }
 
+    func newEpisode(episode: Episode) {
+        do {
+            var episodes = newEpisodes()
+            episodes.insert(episode, at: 0)
+            let data = try JSONEncoder().encode(episodes)
+            UserDefaults.standard.set(data, forKey: UserDefaults.episodesKey)
+        } catch let encodeErr {
+            print("Failed to encode episode:", encodeErr)
+        }
+    }
+    func newEpisodes() -> [Episode] {
+        guard let episodesKey = data(forKey: UserDefaults.episodesKey) else { return [] }
+        do {
+            let episodes = try JSONDecoder().decode([Episode].self, from: episodesKey)
+            var unListenedEpisodes = [Episode]()
+            for episode in episodes{
+            if inProgressEpisodes().contains(where: { $0.title == episode.title}){
+               
+            }
+            else{
+                 unListenedEpisodes.append(episode)
+                }
+            
+        }
+            unListenedEpisodes.sort { $0.pubDate > $1.pubDate }
+            return unListenedEpisodes
+        } catch let decodeErr{
+            print("Failed to decode:", decodeErr)
+        }
+        return []
+        
+    }
+    
     func inProgressEpisode(episode: Episode) {
         do {
             var episodes = inProgressEpisodes()

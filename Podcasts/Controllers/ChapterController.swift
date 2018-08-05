@@ -37,7 +37,7 @@ class ChapterController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
     }
      override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-                 PlayerService.sharedIntance.showActivity(show: false)
+//                 PlayerService.sharedIntance.showActivity(show: false)
     }
     func fillInDesign(){
         navigationController?.navigationBar.topItem?.title = "";
@@ -71,16 +71,18 @@ class ChapterController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
         
         descriptionLabel.text = episode.description
         if !shouldPlay {
-            PlayerService.sharedIntance.play(episode: episode, shouldSave: false)
+            PlayerService.sharedIntance.play(episode: episode, shouldSave: false, sender: nil)
         }
         else{
-            PlayerService.sharedIntance.play(episode: episode, shouldSave: true)
+            PlayerService.sharedIntance.play(episode: episode, shouldSave: true, sender: nil)
         }
         currentChapterArray = fetchChapters(PlayerService.sharedIntance.playerItem.asset.availableChapterLocales)
         if !shouldPlay{
-            PlayerService.sharedIntance.playerView?.handlePlayPause(notSave: true)
-            artWorkImage.sd_setImage(with: URL(string: episode.imageUrl!))
+       
+            PlayerService.sharedIntance.playerView?.handlePlayPause(notSave: true, sender: nil)
+         
         }
+           artWorkImage.sd_setImage(with: URL(string: episode.imageUrl!))
     }
     
     
@@ -174,7 +176,8 @@ class ChapterController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
     
     @IBAction func handlePlayEpisode(_ sender: UIButton) {
 
-        PlayerService.sharedIntance.play(episode: episode, shouldSave: true)
+        PlayerService.sharedIntance.play(episode: episode, shouldSave: true, sender: nil)
+     
     }
     
     @IBAction func handleOption(_ sender: UIButton) {

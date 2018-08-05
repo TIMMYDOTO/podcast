@@ -80,7 +80,7 @@
                 <outlet property="favouriteBtn" destination="5MD-6e-Zuk" id="fNE-hm-ABH"/>
                 <outlet property="pauseBtn" destination="JUr-Fe-7iG" id="r9Y-lN-uqb"/>
             </connections>
-            <point key="canvasLocation" x="-6" y="192.5"/>
+            <point key="canvasLocation" x="-6.5" y="192.5"/>
         </view>
     </objects>
     <resources>

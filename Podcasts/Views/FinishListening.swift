@@ -15,7 +15,7 @@ class FinishListening: UITableViewCell {
     @IBOutlet var remainingTime: UILabel!
     @IBOutlet var thumbNail: UIImageView!
     @IBOutlet var titleLabel: UILabel!
-    @IBOutlet var playBtn: UIButton!
+    @IBOutlet var playBtn: UIButtonWitName!
     
     @IBOutlet var shadowView: UIView!
     var stringURL = String()

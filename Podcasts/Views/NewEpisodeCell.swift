@@ -14,7 +14,7 @@ class NewEpisodeCell: UITableViewCell {
     @IBOutlet var title: UILabel!
     @IBOutlet var pubdate: UILabel!
     @IBOutlet var author: UILabel!
-    @IBOutlet var playBtn: UIButton!
+    @IBOutlet var playBtn: UIButtonWitName!
     @IBOutlet var shadowView: UIView!
     var stringURL = String()
     

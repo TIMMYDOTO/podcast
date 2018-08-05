@@ -9,10 +9,13 @@
 import UIKit
 import SDWebImage
 import Alamofire
+
+
+
 class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource {
-    let noContentLabel = UILabel()
+    var previousSender: UIButtonWitName?
     var pageControl = UIPageControl()
-    
+      let noContentLabel = UILabel()
     let collectinCellId = "collectinCellId"
     @IBOutlet var mainTableView: MainTableView!
     var downloadedEpisodes = UserDefaults.standard.downloadedEpisodes()
@@ -26,7 +29,7 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
     @IBOutlet var collectionView: CollectionViewWithName!
     var containerCollectionView = UIView()
     
-    
+    var previousButton = UIButtonWitName()
     var deletedTablesMutable = NSMutableArray()
     let cellIdNewEpisode = "cellIdNewEpisode"
     var episodes = [Episode]()
@@ -39,14 +42,15 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
     
     let cellIdDownloadCell = "downloadCell"
     let formatter = DateFormatter()
-    
+
     var numberOfRows = NSMutableArray()
     var plusBarItem: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+//        getEpisodes()
+     
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
@@ -68,23 +72,26 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
         settingViews()
         
     }
+
     func getEpisodes(){
         let feedURLs = self.podcasts.compactMap { $0.feedUrl }
         print(feedURLs)
-        var i = 0
+
         for url in feedURLs {
-            i = i + 1
-            if i == 6
-            {
-                break
+            
+            APIService.shared.fetchEpisodes(feedUrl: url) { (episodes, rss) in
+                for episode in episodes{
+                if self.incompleteEpisodes.contains(where: { $0.title == episode.title}){
+             
+                }else{
+                    self.episodes.append(episode)
+                    self.episodes.sort { $0.pubDate > $1.pubDate }
+                    }
             }
-            APIService.shared.fetchEpisodes(feedUrl: url) { (episode, _) in
                 
-                self.episodes.append(contentsOf: episode)
-                self.episodes.sort { $0.pubDate > $1.pubDate }
+          
                 DispatchQueue.main.async {
-                    print("new request")
-                    
+       
                     self.newEpisodesTableView.reloadData()
                 }
             }
@@ -92,6 +99,11 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        
+        episodes = UserDefaults.standard.newEpisodes()
+         self.newEpisodesTableView.reloadData()
+        
         navigationController?.navigationBar.tintColor = .black
         self.navigationController?.navigationBar.isTranslucent = false
         
@@ -103,7 +115,9 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
         
         numberOfRows.removeAllObjects()
         numberOfRows.add(collectionView.nameForCollectionView)
+        if episodes.count > 0 {
         numberOfRows.add(newEpisodesTableView.nameForTable)
+        }
         if incompleteEpisodes.count > 0 {
             numberOfRows.add(finishListeningTableView.nameForTable)
         }
@@ -113,15 +127,7 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
             numberOfRows.remove(table)
         }
         podcasts = UserDefaults.standard.savedPodcasts()
-        
-        if numberOfRows.contains("newEpisodesTableView") {
-            getEpisodes()
-        }
-        
-        
-        
-        
-        
+     
         collectionView?.reloadData()
         
         
@@ -144,10 +150,7 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
         mainTableView.reloadData()
         
     }
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-    }
+
     func settingViews(){
         
         mainTableView.separatorStyle = .none
@@ -273,13 +276,22 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
         
     }
     @objc fileprivate func searchButtonPressed() {
-        navigationController?.pushViewController(PodcastsSearchController(), animated: true)
+        let transition = CATransition()
+        transition.duration = 0.3
+        transition.type = kCATransitionPush
+        transition.subtype = kCATransitionFromRight
+        transition.timingFunction = CAMediaTimingFunction(name:kCAMediaTimingFunctionEaseInEaseOut)
+        view.window!.layer.add(transition, forKey: kCATransition)
+        navigationController?.pushViewController(PodcastsSearchController(), animated: false)
+        
+
     }
     @objc fileprivate func optionButtonPressed(){
         
         mainTableView.isEditing = !mainTableView.isEditing
         if mainTableView.isEditing {
             plusBarItem.isEnabled = true
+            
             containerCollectionView.transform = CGAffineTransform(scaleX: 0.7, y: 0.7);
             newEpisodesTableView.transform = CGAffineTransform(scaleX: 0.7, y: 0.7);
             finishListeningTableView.transform = CGAffineTransform(scaleX: 0.7, y: 0.7);
@@ -292,6 +304,7 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
             
         }else{
             plusBarItem.isEnabled = false
+
             containerCollectionView.transform = CGAffineTransform(scaleX: 1, y: 1);
             newEpisodesTableView.transform = CGAffineTransform(scaleX: 1, y: 1);
             finishListeningTableView.transform = CGAffineTransform(scaleX: 1, y: 1);
@@ -373,6 +386,7 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == newEpisodesTableView {
+
             if(self.episodes.count > 2){
                 return 3
             }else{
@@ -420,10 +434,10 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
             
             
             
-            if episodes[indexPath.row].imageUrl != nil{
-                let url = URL(string: episodes[indexPath.row].imageUrl?.toSecureHTTPS() ?? "")
-                
-                cell.thumbNail.sd_setImage(with: url)
+        
+//                let url = URL(string: episodes[indexPath.row].imageUrl?.toSecureHTTPS() ?? "")
+            
+            cell.thumbNail.sd_setImage(with: URL(string:episodes[indexPath.row].imageUrl!))
                 cell.thumbNail.frame =  cell.shadowView.bounds
                 cell.thumbNail.clipsToBounds = true
                 cell.thumbNail.layer.cornerRadius = 10
@@ -438,7 +452,9 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
                 cell.stringURL = self.episodes[indexPath.row].streamUrl
                 cell.playBtn.tag = indexPath.row
                 cell.playBtn.addTarget(self, action: #selector(playButtonClicked), for: .touchUpInside)
-            }
+            cell.playBtn.vc = newEpisodesTableView!
+                cell.playBtn.episode = self.episodes[indexPath.row]
+            
             return cell
         }
         if tableView == finishListeningTableView! {
@@ -468,22 +484,23 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
             //            cell.definition.sizeToFit()
             
             let time = self.incompleteEpisodesTime[indexPath.row]
-            print("row:", indexPath.row, time)
+      
             if let fullTime = self.incompleteEpisodes[indexPath.row].duration {
                 let timeRemaining = fullTime - time
                 cell.remainingTime.text = timeRemaining.asString(style: .abbreviated) + " remaining"
                 cell.remainingTime.textAlignment = .right
             }
-            
+      
             
             let url = URL(string: incompleteEpisodes[indexPath.row].imageUrl?.toSecureHTTPS() ?? "")
             
-            cell.thumbNail.sd_setImage(with: url, completed: nil)
+             cell.thumbNail.sd_setImage(with: URL(string:incompleteEpisodes[indexPath.row].imageUrl!))
             cell.thumbNail.clipsToBounds = true
             cell.thumbNail.layer.cornerRadius = 10
             cell.shadowView.addSubview(cell.thumbNail)
             cell.stringURL = incompleteEpisodes[indexPath.row].streamUrl
             cell.playBtn.tag = indexPath.row
+            cell.playBtn.episode = self.incompleteEpisodes[indexPath.row]
             cell.playBtn.addTarget(self, action: #selector(playButtonClicked), for: .touchUpInside)
             return cell
         }
@@ -504,7 +521,7 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
             cell.shadowView.layer.shadowRadius = 3
             cell.shadowView.layer.shadowPath = UIBezierPath(roundedRect: cell.shadowView.bounds, cornerRadius: 10).cgPath
             
-            let url = URL(string: downloadedEpisodes[indexPath.row].imageUrl?.toSecureHTTPS() ?? "")
+            let url = URL(string: downloadedEpisodes[indexPath.row].imageUrl!)
             cell.thumbNailImgView.sd_setImage(with: url)
             cell.thumbNailImgView.frame =  cell.shadowView.bounds
             cell.thumbNailImgView.clipsToBounds = true
@@ -520,6 +537,7 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
             cell.pubdateLabel.text = formatter.string(from: self.downloadedEpisodes[indexPath.row].pubDate)
             cell.pubdateLabel.textAlignment = .right
             cell.playBtn.tag = indexPath.row
+            cell.playBtn.episode = self.downloadedEpisodes[indexPath.row]
             cell.playBtn.addTarget(self, action: #selector(playButtonClicked), for: .touchUpInside)
             
             return cell
@@ -549,13 +567,45 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
         }
         
     }
-    @objc func playButtonClicked(sender: UIButton){
-        print("playButtonClicked", sender.tag)
-        let chapterController = storyboard?.instantiateViewController(withIdentifier: "ChapterController") as! ChapterController
-        //        chapterController.podcastName = titleLabel.text
-        chapterController.episode = episodes[sender.tag]//remake
-        chapterController.shouldPlay = true
-        self.navigationController?.pushViewController(chapterController, animated: true)
+    @objc func playButtonClicked(sender: UIButtonWitName){
+        if previousSender != nil{
+            previousSender?.setBackgroundImage(#imageLiteral(resourceName: "play-button-2"), for: .normal)
+        }
+        if previousSender == sender{
+  
+            sender.setBackgroundImage(#imageLiteral(resourceName: "play-button-2"), for: .normal)
+            PlayerService.sharedIntance.player.pause()
+            PlayerService.sharedIntance.playerDetailsView.playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            PlayerService.sharedIntance.playerView?.pauseBtn.setImage(#imageLiteral(resourceName: "play-1"), for: .normal)
+            PlayerService.sharedIntance.saveInProgress()
+            episodes = UserDefaults.standard.newEpisodes()
+            incompleteEpisodes = UserDefaults.standard.inProgressEpisodes()
+            
+         
+            
+            incompleteEpisodesTime = UserDefaults.standard.inProgressEpisodesTimes()
+            if self.episodes.count > 0 {
+                    newEpisodesTableView.reloadData()
+            }else{
+                numberOfRows.remove(newEpisodesTableView.nameForTable)
+                mainTableView.reloadData()
+            }
+        
+            if !numberOfRows.contains(finishListeningTableView.nameForTable){
+            numberOfRows.add(finishListeningTableView.nameForTable)
+                mainTableView.reloadData()
+            }
+            finishListeningTableView.reloadData()
+
+            previousSender = nil
+            return
+        }
+   
+      
+        previousSender = sender
+        PlayerService.sharedIntance.play(episode: sender.episode!, shouldSave: false, sender: sender)
+           PlayerService.sharedIntance.playerView?.homeVC = self
+
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

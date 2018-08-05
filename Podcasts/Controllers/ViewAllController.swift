@@ -36,7 +36,7 @@ class ViewAllController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
                     }
                 }
             }
-                title = "New Episode"
+                title = "New Episodes"
         }
          if nameOfTable == "finishListeningTableView" {
             

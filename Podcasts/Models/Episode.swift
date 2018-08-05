@@ -23,7 +23,7 @@ struct Episode: Codable {
     let duration: Double?
 
     var podcast:Podcast?
-  
+   
     init(feedItem: RSSFeedItem) {
   
         self.streamUrl = feedItem.enclosure?.attributes?.url ?? ""
@@ -36,7 +36,8 @@ struct Episode: Codable {
       
        
     }
-
+    
+  
     
 }
 

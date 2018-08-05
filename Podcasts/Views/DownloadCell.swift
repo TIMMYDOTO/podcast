@@ -13,7 +13,7 @@ class DownloadCell: UITableViewCell {
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var pubdateLabel: UILabel!
     @IBOutlet var authorLabel: UILabel!
-    @IBOutlet var playBtn: UIButton!
+    @IBOutlet var playBtn: UIButtonWitName!
     @IBOutlet var shadowView: UIView!
     
     override func awakeFromNib() {
