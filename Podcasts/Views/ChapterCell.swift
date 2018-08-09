@@ -14,7 +14,7 @@ class ChapterCell: UITableViewCell {
     
     @IBOutlet weak var chapterStartTimeLabel: UILabel!
     
-    @IBOutlet weak var chapterStartButton: UIButton!
+    @IBOutlet weak var chapterStartButton: UIButtonWitName!
     override func awakeFromNib() {
         super.awakeFromNib()
         

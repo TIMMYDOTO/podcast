@@ -34,7 +34,16 @@ class PodcastsSearchController: UITableViewController, UISearchBarDelegate {
     }
     
     @objc func backButton(){
-        navigationController?.popViewController(animated: true)
+//        navigationController?.popViewController(animated: true)
+        let transition = CATransition()
+        transition.duration = 0.3
+        transition.type = kCATransitionPush
+        transition.subtype = kCATransitionFromRight
+        transition.timingFunction = CAMediaTimingFunction(name:kCAMediaTimingFunctionEaseInEaseOut)
+        view.window!.layer.add(transition, forKey: kCATransition)
+ 
+        navigationItem.searchController = nil
+        navigationController?.popToRootViewController(animated: false)
     }
     
     fileprivate func setupTableView() {

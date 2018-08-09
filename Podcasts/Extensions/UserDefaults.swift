@@ -116,6 +116,20 @@ extension UserDefaults {
         return []
     }
     
+    func deleteNewEpisode(episode: Episode) {
+        let savedEpisodes = newEpisodes()
+        let filteredEpisodes = savedEpisodes.filter { (episode) -> Bool in
+            return episode.title != episode.title
+        }
+        do {
+            let data = try JSONEncoder().encode(filteredEpisodes)
+            UserDefaults.standard.set(data, forKey: UserDefaults.episodesKey)
+        } catch let encodeErr {
+            print("Failed to encode episode:", encodeErr)
+        }
+    }
+    
+    
     func deleteEpisode(episode: Episode) {
         let savedEpisodes = downloadedEpisodes()
         let filteredEpisodes = savedEpisodes.filter { (episode) -> Bool in
@@ -129,10 +143,25 @@ extension UserDefaults {
         }
     }
     
-    func deleteEpisodeInProgress(episode: Episode) {
-       let inProgressEpisodesArray = inProgressEpisodes()
-        let filteredInProgressEpisodesArray = inProgressEpisodesArray.filter { (episode) -> Bool in
+    func deleteFinishListening(episode: Episode){
+        let inProgressEpisodesArray = inProgressEpisodes()
+        let filteredEpisodes = inProgressEpisodesArray.filter { (episode) -> Bool in
             return episode.title != episode.title
+        }
+        do {
+            let data = try JSONEncoder().encode(filteredEpisodes)
+            UserDefaults.standard.set(data, forKey: UserDefaults.inProgressEpisodeKey)
+        } catch let encodeErr {
+            print("Failed to encode episode:", encodeErr)
+        }
+    }
+    
+    
+    func deleteEpisodeInProgress(finishEpisode: Episode) {
+       let inProgressEpisodesArray = inProgressEpisodes()
+     
+        let filteredInProgressEpisodesArray = inProgressEpisodesArray.filter { (episode) -> Bool in
+            return episode.title != finishEpisode.title
         }
         do {
             let data = try JSONEncoder().encode(filteredInProgressEpisodesArray)

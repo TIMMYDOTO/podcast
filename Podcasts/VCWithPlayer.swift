@@ -16,11 +16,11 @@ class VCWithPlayer: UIViewController {
            self.view.transform = CGAffineTransform(scaleX: Constants.scale, y: Constants.scale)
         let window = UIApplication.shared.keyWindow!
         window.addSubview(PlayerService.sharedIntance.playerView!)
-        
-        
+    
  
     }
 
+ 
  
 }
 extension UIActivityIndicatorView {

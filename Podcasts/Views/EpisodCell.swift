@@ -17,7 +17,7 @@ class EpisodCell: UITableViewCell {
 
     var streamUrl: String!
 
-    @IBOutlet var playButton: UIButton!
+    @IBOutlet var playButton: UIButtonWitName!
     
     var podcast:Podcast?
     override func awakeFromNib() {

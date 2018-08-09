@@ -16,7 +16,7 @@ class VewAllCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
     
-    @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var playButton: UIButtonWitName!
     
     @IBOutlet weak var pubdateLabel: UILabel!
     

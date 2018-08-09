@@ -12,12 +12,13 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
     var incompleteEpisodes = UserDefaults.standard.inProgressEpisodes()
     let formatter = DateFormatter()
     var clickedPodcast = Podcast()
-    
+    var previousSender: UIButtonWitName?
     @IBOutlet var thumbnail: UIImageView!
     
     @IBOutlet weak var episodesTableView: UITableView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet var addToLibraryButton: UIButton!
     
     @IBOutlet weak var authorLabel: UILabel!
     var episodes = [Episode]()
@@ -43,11 +44,11 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
             DispatchQueue.main.async {
                 self.episodesTableView.reloadData()
                 feed.description =  feed.description?.replacingOccurrences(of: "\n", with: "")
-                self.descriptionLabel.text = feed.description
+             
+                self.descriptionLabel.text = feed.description?.withoutHtml
                 self.authorLabel.text = self.podcast?.artistName
  
                 self.titleLabel.text = feed.title
-         
                 self.thumbnail.sd_setImage(with: URL(string: self.podcast?.artworkUrl600 ?? ""), completed: nil)
             }
         }
@@ -56,17 +57,41 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
  
     override func viewDidLoad() {
         super.viewDidLoad()
-      
-        
+        if isFavorite() {
+             addToLibraryButton.setTitle("Remove from Library", for: .normal)
+        }else{
+             addToLibraryButton.setTitle("Add to Library", for: .normal)
+        }
+        addToLibraryButton.layer.cornerRadius = 20
         navigationController?.navigationBar.topItem?.title = "";
     
         self.navigationController?.navigationBar.isTranslucent = true
         formatter.dateFormat = "MMM d"
         let feedURLs = podcasts.compactMap { $0.feedUrl }
         print(feedURLs)
+    
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+        visualEffectView.alpha = 0.8
+        visualEffectView.frame = self.thumbnail.bounds
+        
+        self.thumbnail.addSubview(visualEffectView)
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        
+       
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
 
-      
-
+    }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 140
+    }
+    @objc func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     fileprivate func isFavorite() -> Bool{
         let savedPodcasts = UserDefaults.standard.savedPodcasts()
@@ -81,13 +106,15 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.tintColor = .white
-
+        if let selectionIndexPath = episodesTableView.indexPathForSelectedRow {
+            self.episodesTableView.deselectRow(at: selectionIndexPath, animated: animated)
+        }
     }
  
     @IBAction func handleAddToLibrary(_ sender: UIButton) {
+        
         if   !isFavorite() {
-         
-       
+
         guard let podcast = self.podcast else { return }
 
             
@@ -98,20 +125,23 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
                     }else{
                         
                         self.episodes.append(episode)
-//                        self.episodes.sort { $0.pubDate > $1.pubDate }
-                     
+                        //
+                        
                     }
+                    
                 }
                 
-                for episode in episodes{
+                for var episode in episodes{
+                    episode.podcast = podcast
                     UserDefaults.standard.newEpisode(episode: episode)
                     
                     
                 }
-                
+              
+            
+          
             }
 
-            
             
             
             
@@ -120,10 +150,24 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
         let data = NSKeyedArchiver.archivedData(withRootObject: listOfPodcasts)
         UserDefaults.standard.set(data, forKey: UserDefaults.favoritedPodcastKey)
             
-  }
-
+            addToLibraryButton.setTitle("Remove from Library", for: .normal)
+       
+        }else{
+            addToLibraryButton.setTitle("Add to Library", for: .normal)
+            UserDefaults.standard.deletePodcast(podcast: podcast!)
+//            guard let podcast = self.podcast else { return }
+            
+            
+//            APIService.shared.fetchEpisodes(feedUrl: podcast.feedUrl!) { (episodes, rss) in
+                for episode in episodes{
+                    UserDefaults.standard.deleteNewEpisode(episode: episode)
+                }
+                
+                
+//            }
+            
+        }
     }
-    
     @IBAction func handleOption(_ sender: UIButton) {
        
     }
@@ -151,28 +195,42 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
         cell.streamUrl = self.currentEpisodes[indexPath.row].streamUrl
      
         cell.podcast = self.currentEpisodes[indexPath.row].podcast
-        cell.playButton.tag = indexPath.row
+        cell.playButton.episode = self.currentEpisodes[indexPath.row]
         cell.playButton.addTarget(self, action: #selector(playButtonClicked), for: .touchUpInside)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        PlayerService.sharedIntance.episodes = episodes
       let chapterController = storyboard?.instantiateViewController(withIdentifier: "ChapterController") as! ChapterController
         chapterController.podcastName = titleLabel.text
         chapterController.episode = episodes[indexPath.row]
-     chapterController.shouldPlay = false
-        self.navigationController?.pushViewController(chapterController, animated: true)
+        chapterController.shouldPlay = false
+         self.navigationController?.navigationBar.topItem?.title = "";
+        chapterController.fillInDesign() {
+            self.navigationController?.pushViewController(chapterController, animated: true)
+        }
 //        PlayerService.sharedIntance.play(stringURL: cell.streamUrl)
     }
     
-    @objc func playButtonClicked(sender: UIButton){
-        print("playButtonClicked", sender.tag)
-        let chapterController = storyboard?.instantiateViewController(withIdentifier: "ChapterController") as! ChapterController
-        chapterController.podcastName = titleLabel.text
-        chapterController.episode = episodes[sender.tag]
-        chapterController.shouldPlay = true
-        self.navigationController?.pushViewController(chapterController, animated: true)
+    @objc func playButtonClicked(sender: UIButtonWitName){
+        PlayerService.sharedIntance.episodes = episodes
+        if previousSender == sender{
+            
+            sender.setBackgroundImage(#imageLiteral(resourceName: "play-button-2"), for: .normal)
+            PlayerService.sharedIntance.player.pause()
+            PlayerService.sharedIntance.playerDetailsView.playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            PlayerService.sharedIntance.playerView?.pauseBtn.setImage(#imageLiteral(resourceName: "play-1"), for: .normal)
+            
+            previousSender = nil
+            return
+        }
+        if previousSender != nil{
+            previousSender?.setBackgroundImage(#imageLiteral(resourceName: "play-button-2"), for: .normal)
+        }
+        sender.setBackgroundImage(#imageLiteral(resourceName: "Pause button"), for: .normal)
+          PlayerService.sharedIntance.play(episode: sender.episode!, shouldSave: false, sender: sender)
+         previousSender = sender
     }
  class func getHoursMinutes(time: Double) -> String {
     
@@ -201,3 +259,4 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
 
     
 }
+

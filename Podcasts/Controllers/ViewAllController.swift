@@ -10,7 +10,7 @@ import UIKit
 
 class ViewAllController: VCWithPlayer, UITableViewDataSource, UITableViewDelegate {
     var nameOfTable : String!
-    
+    var previousSender: UIButtonWitName?
     let podcasts = UserDefaults.standard.savedPodcasts()
     var episodes = [Episode]()
     var formatter = DateFormatter()
@@ -18,24 +18,15 @@ class ViewAllController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         var title = ""
-   formatter.dateFormat = "MMM d, yyyy"
+        
+        formatter.dateFormat = "MMM d, yyyy"
         
         let feedURLs =  podcasts.compactMap { $0.feedUrl }
         
         print(feedURLs)
-        var i = 0
+   
         if nameOfTable == "newEpisodesTableView" {
-            for url in feedURLs {
-         
-                APIService.shared.fetchEpisodes(feedUrl: url) { (episode, _) in
-                  
-                    self.episodes.append(contentsOf: episode)
-                    self.episodes.sort { $0.pubDate > $1.pubDate }
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                }
-            }
+        episodes = UserDefaults.standard.newEpisodes()
                 title = "New Episodes"
         }
          if nameOfTable == "finishListeningTableView" {
@@ -58,15 +49,7 @@ class ViewAllController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
          
-//            if nameOfTable == "newEpisodesTableView"{
-//
-////            UserDefaults.standard.deleteEpisode(episode: episodes[indexPath.row])
-//            }
-//            if nameOfTable == "finishListeningTableView"{
-////                UserDefaults.standard.deleteEpisodeInProgress(episode: episodes[indexPath.row])
-//
-//
-//            }
+
             if nameOfTable == "downloadTableView"{
                 UserDefaults.standard.deleteDownloadedEpisode(episode: episodes[indexPath.row])
          
@@ -81,7 +64,11 @@ class ViewAllController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
 //        chapterController.podcastName = titleLabel.text
         chapterController.episode = episodes[indexPath.row]
         chapterController.shouldPlay = false
-        self.navigationController?.pushViewController(chapterController, animated: true)
+            self.navigationController?.navigationBar.topItem?.title = ""
+        chapterController.fillInDesign() {
+        
+            self.navigationController?.pushViewController(chapterController, animated: true)
+        }
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return episodes.count
@@ -91,8 +78,8 @@ class ViewAllController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
        let cell = tableView.dequeueReusableCell(withIdentifier: "VewAllCell", for: indexPath) as! VewAllCell
       
         cell.titleLabel.text = episodes[indexPath.row].title
-        cell.titleLabel.sizeToFit()
-        cell.authorLabel.text = self.episodes[indexPath.row].author
+
+        cell.authorLabel.text = self.episodes[indexPath.row].podcast?.trackName
         cell.authorLabel.sizeToFit()
         cell.pubdateLabel.text =  formatter.string(from: self.episodes[indexPath.row].pubDate)
      
@@ -106,10 +93,32 @@ class ViewAllController: VCWithPlayer, UITableViewDataSource, UITableViewDelegat
         cell.episodeImageView.clipsToBounds = true
         cell.episodeImageView.layer.cornerRadius = 10
         cell.shadowView.addSubview(cell.episodeImageView)
+        cell.playButton.episode = self.episodes[indexPath.row]
+        cell.playButton.addTarget(self, action: #selector(playButtonClicked), for: .touchUpInside)
         return cell
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 56
+    }
+    
+    @objc func playButtonClicked(sender: UIButtonWitName){
+        PlayerService.sharedIntance.episodes = episodes
+        if previousSender == sender{
+            
+            sender.setBackgroundImage(#imageLiteral(resourceName: "play-button-2"), for: .normal)
+            PlayerService.sharedIntance.player.pause()
+            PlayerService.sharedIntance.playerDetailsView.playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            PlayerService.sharedIntance.playerView?.pauseBtn.setImage(#imageLiteral(resourceName: "play-1"), for: .normal)
+            
+            previousSender = nil
+            return
+        }
+        if previousSender != nil{
+            previousSender?.setBackgroundImage(#imageLiteral(resourceName: "play-button-2"), for: .normal)
+        }
+        sender.setBackgroundImage(#imageLiteral(resourceName: "Pause button"), for: .normal)
+        PlayerService.sharedIntance.play(episode: sender.episode!, shouldSave: true, sender: sender)
+        previousSender = sender
     }
 }

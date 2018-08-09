@@ -29,36 +29,73 @@ class PlayerDetailsView2: UIView, UIGestureRecognizerDelegate, UITableViewDelega
     
     var currentChapterArray = [Chapter]()
 
-
+    var episodes = [Episode]()
     var episode: Episode! {
         didSet{
             episodeTitleLabel.text = episode.title
             authorLabel.text = episode.author
             episodeDescriptionLabel.text = episode.description
+            episodeDescriptionLabel.sizeToFit()
             guard let url = URL(string: episode.imageUrl ?? "") else { return }
             episodeImageView.sd_setImage(with: url)
             episodeImageView.layer.cornerRadius = 8.0
+       
 //             guard let image = image else { return }
-             var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo
-//            let artwork = MPMediaItemArtwork(boundsSize: image.size, requestHandler: { (_) -> UIImage in
-//                return image
-//            })
-//            nowPlayingInfo?[MPMediaItemPropertyArtwork] = artwork
-               MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+//            let nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo
+////            let artwork = MPMediaItemArtwork(boundsSize: image.size, requestHandler: { (_) -> UIImage in
+////                return image
+////            })
+////            nowPlayingInfo?[MPMediaItemPropertyArtwork] = artwork
+//               MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
         }
     }
+//    fileprivate func  setupNowPlayingInfo() {
+//        var nowPlayingInfo = [String : Any]()
+//        nowPlayingInfo[MPMediaItemPropertyTitle] = episode.title
+//        nowPlayingInfo[MPMediaItemPropertyArtist] = episode.author
+//        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+//    }
+    fileprivate func observeBoundaryTime() {
+        let time = CMTimeMake(1, 3)
+        let times = [NSValue(time: time)]
+        PlayerService.sharedIntance.player.addBoundaryTimeObserver(forTimes: times, queue: .main) {
+            [weak self] in
+            print("Episode started playing")
+            self?.enlargeEpisodeImageView()
+            self?.setupLockScreenDuration()
+        }
+    }
+    fileprivate func setupLockScreenDuration() {
+        guard let duration = PlayerService.sharedIntance.player.currentItem?.duration else { return }
+        let durationSeconds = CMTimeGetSeconds(duration)
+        MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration] = durationSeconds
+    }
+    
     static func initFromNib() -> PlayerDetailsView2 {
              
         return Bundle.main.loadNibNamed("PlayerDetailsView", owner: self, options: nil)?.first as! PlayerDetailsView2
         
     }
+
+
         override func awakeFromNib() {
-         
+        
             setupTableView()
             setupVolumeView()
             setupInterruptionObserver()
-               self.transform = CGAffineTransform(scaleX: Constants.scale, y: Constants.scale)
-             volumeSlider.setValue(AVAudioSession.sharedInstance().outputVolume, animated: true)
+            
+            
+            
+            volumeSlider.setValue(AVAudioSession.sharedInstance().outputVolume, animated: true)
+            
+            var contentRect = CGRect.zero
+            
+            for view in scrollView.subviews {
+                contentRect = contentRect.union(view.frame)
+            }
+            print("contentRect.size", contentRect.size)
+            scrollView.contentSize = contentRect.size
+            self.transform = CGAffineTransform(scaleX: Constants.scale, y: Constants.scale)
     }
     
     fileprivate func setupInterruptionObserver() {
@@ -66,6 +103,7 @@ class PlayerDetailsView2: UIView, UIGestureRecognizerDelegate, UITableViewDelega
         NotificationCenter.default.addObserver(self, selector: #selector(volumeChanged(notification:)),
                                                name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"),
                                                object: nil)
+        
     }
     @objc func volumeChanged(notification: NSNotification) {
         
@@ -82,6 +120,9 @@ class PlayerDetailsView2: UIView, UIGestureRecognizerDelegate, UITableViewDelega
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return currentChapterArray.count
     }
+    
+    
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: "cellId")
         let delta = Int64(currentChapterArray[indexPath.row].start)
@@ -91,6 +132,8 @@ class PlayerDetailsView2: UIView, UIGestureRecognizerDelegate, UITableViewDelega
         //        cell.detailTextLabel?.text = "\(startTime)"
         return cell
     }
+    
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
         let delta = Int64(currentChapterArray[indexPath.row].start)
@@ -105,6 +148,9 @@ class PlayerDetailsView2: UIView, UIGestureRecognizerDelegate, UITableViewDelega
       self.addSubview(volumeView)
 
     }
+    
+    
+    
      func observePlayerCurrentTime() {
         let interval = CMTimeMake(1, 2)
         PlayerService.sharedIntance.player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] (time) in
@@ -114,17 +160,25 @@ class PlayerDetailsView2: UIView, UIGestureRecognizerDelegate, UITableViewDelega
             self?.updateCurrentTimeSlider()
         }
     }
+    
+    
+    
     fileprivate func  updateCurrentTimeSlider() {
         let currentTimeSeconds = CMTimeGetSeconds(PlayerService.sharedIntance.player.currentTime())
         let durationSeconds = CMTimeGetSeconds(PlayerService.sharedIntance.player.currentItem?.duration ?? CMTimeMake(1, 1  ))
         let percentage = currentTimeSeconds / durationSeconds
         self.currentTimeSlider.value = Float(percentage)
     }
+    
+    
+    
     fileprivate func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
     }
+    
+    
     @IBAction func handleDismiss(_ sender: UIButton) {
               self.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseIn, animations:{ self.frame = CGRect(x:0, y:UIScreen.main.bounds.height+20, width:UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)}) { (hasFinished) in
@@ -135,11 +189,14 @@ class PlayerDetailsView2: UIView, UIGestureRecognizerDelegate, UITableViewDelega
     
     @IBAction func playbackSpeedBtnPressed(_ sender: UIButton) {
         sender.tag += 1
+        playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
         if sender.tag > 3 { sender.tag = 0}
+        
         switch  sender.tag {
         case 1:
             PlayerService.sharedIntance.player.rate = 1.5
             playbackSpeedButton.setTitle("\(PlayerService.sharedIntance.player.rate)", for: .normal)
+            
         case 2:
             PlayerService.sharedIntance.player.rate = 2.0
             playbackSpeedButton.setTitle("\(PlayerService.sharedIntance.player.rate)", for: .normal)
@@ -151,12 +208,17 @@ class PlayerDetailsView2: UIView, UIGestureRecognizerDelegate, UITableViewDelega
             playbackSpeedButton.setTitle("\(PlayerService.sharedIntance.player.rate)", for: .normal)
         }
     }
+    
+    
     @IBAction func handleRewind(_ sender: UIButton) {
         seekToCurrentTime(delta: -15)
     }
+    
     @IBAction func handleFastForward(_ sender: UIButton) {
         seekToCurrentTime(delta: 15)
     }
+    
+    
     fileprivate func seekToCurrentTime(delta: Int64) {
         let fifteenSeconds = CMTimeMake(delta, 1)
         let seekTime = CMTimeAdd(PlayerService.sharedIntance.player.currentTime(), fifteenSeconds)
@@ -171,21 +233,36 @@ class PlayerDetailsView2: UIView, UIGestureRecognizerDelegate, UITableViewDelega
         let durationInSeconds = CMTimeGetSeconds(duration)
         let seekTimeInSeconds = Float64(percentage) * durationInSeconds
         let seekTime = CMTimeMakeWithSeconds(seekTimeInSeconds, Int32(NSEC_PER_SEC))
+        
         MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = seekTimeInSeconds
         PlayerService.sharedIntance.player.seek(to: seekTime)
     }
+    
+    
+   
     @IBAction func handlePlayPause(_ sender: UIButton) {
+         PlayerService.sharedIntance.episodes = episodes
+        observePlayerCurrentTime()
+        observeBoundaryTime()
+
         if PlayerService.sharedIntance.player.timeControlStatus == .paused {
             PlayerService.sharedIntance.player.play()
+//
+//            PlayerService.sharedIntance.setupCommandCenter()
+//            PlayerService.sharedIntance.setupRemoteControl()
+            
             playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             PlayerService.sharedIntance.playerView?.pauseBtn.setImage(#imageLiteral(resourceName: "PauseWhite"), for: .normal)
                currentChapterArray = self.fetchChapters(PlayerService.sharedIntance.playerItem.asset.availableChapterLocales)
             if currentChapterArray.count == 0
             {tableView.frame =  .zero}
             else{
-                tableView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 350)
+             
+                
+                tableView.frame = CGRect(x: 16, y: episodeDescriptionLabel.frame.origin.y + episodeDescriptionLabel.frame.height + 10, width: UIScreen.main.bounds.width - 16, height: UIScreen.main.bounds.height - episodeDescriptionLabel.frame.origin.y + episodeDescriptionLabel.frame.height + 20)
+              
                 scrollView.bringSubview(toFront: tableView)
-            tableView.reloadData()
+                tableView.reloadData()
             }
             var contentRect = CGRect.zero
             
@@ -195,14 +272,13 @@ class PlayerDetailsView2: UIView, UIGestureRecognizerDelegate, UITableViewDelega
             print("contentRect.size", contentRect.size)
             scrollView.contentSize = contentRect.size
             
-            
             enlargeEpisodeImageView()
             self.setupElapsedTime(playbackRate: 1)
         } else {
             PlayerService.sharedIntance.player.pause()
             playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
              PlayerService.sharedIntance.playerView?.pauseBtn.setImage(#imageLiteral(resourceName: "play-1"), for: .normal)
-
+            PlayerService.sharedIntance.saveInProgress()
             shrinkEpisodeImageView()
             self.setupElapsedTime(playbackRate: 0)
         }
@@ -212,11 +288,16 @@ class PlayerDetailsView2: UIView, UIGestureRecognizerDelegate, UITableViewDelega
             self.episodeImageView.transform = .identity
         })
     }
+    
+    
+    
     fileprivate func setupElapsedTime(playbackRate: Float) {
         let elapsedTime = CMTimeGetSeconds(PlayerService.sharedIntance.player.currentTime())
         MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = elapsedTime
         MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = playbackRate
     }
+    
+    
     
      fileprivate let shrunkenTransform = CGAffineTransform(scaleX: 0.7, y: 0.7)
     fileprivate func shrinkEpisodeImageView() {

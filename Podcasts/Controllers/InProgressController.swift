@@ -70,7 +70,7 @@ class InProgressController: UITableViewController {
         mainTabBarController?.maximizePlayerDetails(episode: episode, playlistEpisodes: self.incompleteEpisodes)
         let durationInSeconds = Float64(time)
         let seekTime = CMTimeMakeWithSeconds(durationInSeconds, Int32(NSEC_PER_SEC))
-        mainTabBarController?.playerDetailsView.player.seek(to: seekTime)
+      
     }
     
     
@@ -79,7 +79,7 @@ class InProgressController: UITableViewController {
         let time = self.inProgressEpisodesTime[indexPath.row]
         incompleteEpisodes.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .fade)
-        UserDefaults.standard.deleteEpisodeInProgress(episode: episode)
+        UserDefaults.standard.deleteEpisodeInProgress(finishEpisode: episode)
         UserDefaults.standard.deleteInProgressTime(time: time, indexPath: indexPath.row)
         
     }
