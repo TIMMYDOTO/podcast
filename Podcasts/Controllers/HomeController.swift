@@ -10,7 +10,7 @@ import UIKit
 import SDWebImage
 import Alamofire
 import MediaPlayer
-import UIWindowTransitions
+
 
 class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource {
     var previousSender: UIButtonWitName?
@@ -676,11 +676,6 @@ class HomeController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, 
                 self.finishListeningTableView.reloadData()
             }
      
-       
-           
-          
-        
-            
             let delta = Int64(incompleteEpisodes[sender.tag].currentTime ?? 0.0)
             let seekToSeconds = CMTimeMake(delta, 1)
         

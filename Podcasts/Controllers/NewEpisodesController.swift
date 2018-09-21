@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MediaPlayer
 import FeedKit
 class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
     var incompleteEpisodes = UserDefaults.standard.inProgressEpisodes()
@@ -21,12 +22,13 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
     @IBOutlet var addToLibraryButton: UIButton!
     
     @IBOutlet weak var authorLabel: UILabel!
-    var episodes = [Episode]()
+    var episodes = UserDefaults.standard.newEpisodes()
     var currentEpisodes = [Episode]()
     var podcasts = UserDefaults.standard.savedPodcasts()
     
     var podcast: Podcast? {
         didSet {
+          
             fetchEpisodes()
            
         }
@@ -57,6 +59,9 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
  
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+     
+        
         if isFavorite() {
              addToLibraryButton.setTitle("Remove from Library", for: .normal)
         }else{
@@ -138,13 +143,8 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
                     
                 }
               
-            
-          
             }
-
-            
-            
-            
+    
         var listOfPodcasts = UserDefaults.standard.savedPodcasts()
         listOfPodcasts.append(podcast)
         let data = NSKeyedArchiver.archivedData(withRootObject: listOfPodcasts)
@@ -195,6 +195,8 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
         cell.streamUrl = self.currentEpisodes[indexPath.row].streamUrl
      
         cell.podcast = self.currentEpisodes[indexPath.row].podcast
+        
+        cell.playButton.tag = indexPath.row
         cell.playButton.episode = self.currentEpisodes[indexPath.row]
         cell.playButton.addTarget(self, action: #selector(playButtonClicked), for: .touchUpInside)
         return cell
@@ -228,8 +230,13 @@ class NewEpisodesController: VCWithPlayer, UITableViewDelegate, UITableViewDataS
         if previousSender != nil{
             previousSender?.setBackgroundImage(#imageLiteral(resourceName: "play-button-2"), for: .normal)
         }
+        
+//        PlayerService.sharedIntance.saveInProgress()
         sender.setBackgroundImage(#imageLiteral(resourceName: "Pause button"), for: .normal)
-          PlayerService.sharedIntance.play(episode: sender.episode!, shouldSave: false, sender: sender)
+        let delta = Int64(currentEpisodes[sender.tag].currentTime ?? 0.0)
+        let seekToSeconds = CMTimeMake(delta, 1)
+        PlayerService.sharedIntance.play(episode: sender.episode!, shouldSave: false, sender: sender)
+        PlayerService.sharedIntance.player.seek(to: seekToSeconds)
          previousSender = sender
     }
  class func getHoursMinutes(time: Double) -> String {
